@@ -7,6 +7,8 @@ export default new DataSource({
   username: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
-  entities: [],
-  migrations: [],
+  entities: ["src/entities/*.ts"],
+  migrations: ["src/database/migrations/*.ts"],
+  synchronize: true,
+  dropSchema: true,
 });
