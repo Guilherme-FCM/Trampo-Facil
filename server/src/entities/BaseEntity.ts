@@ -2,11 +2,11 @@ import { CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "type
 
 export abstract class BaseEntity {
   @PrimaryGeneratedColumn()
-  public id!: number;
+  public id?: number;
   
   @CreateDateColumn()
-	public created_at!: Date;
+	public created_at?: Date;
 
 	@UpdateDateColumn()
-  public updated_at!: Date;
+  public updated_at?: Date;
 }

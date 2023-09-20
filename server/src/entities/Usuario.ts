@@ -4,14 +4,14 @@ import { BaseEntity } from "./BaseEntity";
 
 export abstract class Usuario extends BaseEntity {
 	@Column()
-	protected email: string;
+	public email: string;
 
 	@Column()
-	protected senha: string;
+	public senha: string;
 
   @OneToOne(() => Endereco)
   @JoinColumn()
-	protected endereco: Endereco;
+	public endereco: Endereco;
 
 	constructor (
 		email: string,
