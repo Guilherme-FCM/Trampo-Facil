@@ -1,30 +1,22 @@
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, Entity } from "typeorm";
+import { BaseEntity } from "./BaseEntity";
 
 @Entity()
-export class Endereco {
-  @PrimaryGeneratedColumn()
-  private id!: number;
+export class Endereco extends BaseEntity {
+  @Column()
+  public descricao: string;
 
   @Column()
-  private descricao: string;
+  public bairro: string;
 
   @Column()
-  private bairro: string;
+  public uf: string;
 
   @Column()
-  private uf: string;
+  public cidade: string;
 
   @Column()
-  private cidade: string;
-
-  @Column()
-  private cep: string;
-
-  @CreateDateColumn()
-  private created_at!: Date;
-
-  @UpdateDateColumn()
-  private updated_at!: Date;
+  public cep: string;
 
   constructor (
     descricao: string,
@@ -33,63 +25,12 @@ export class Endereco {
     cidade: string,
     cep: string,
   ) {
+    super();
+  
     this.descricao = descricao;
     this.bairro = bairro;
     this.uf = uf;
     this.cidade = cidade;
     this.cep = cep;
-  }
-
-
-  public getId(): number {
-    return this.id;
-  }
-
-  public getDescricao(): string {
-    return this.descricao;
-  }
-
-  public setDescricao(descricao: string): void {
-    this.descricao = descricao;
-  }
-
-  public getBairro(): string {
-    return this.bairro;
-  }
-
-  public setBairro(bairro: string): void {
-    this.bairro = bairro;
-  }
-
-  public getUf(): string {
-    return this.uf;
-  }
-
-  public setUf(uf: string): void {
-    this.uf = uf;
-  }
-
-  public getCidade(): string {
-    return this.cidade;
-  }
-
-  public setCidade(cidade: string): void {
-    this.cidade = cidade;
-  }
-
-  public getCep(): string {
-    return this.cep;
-  }
-
-  public setCep(cep: string): void {
-    this.cep = cep;
-  }
-
-  public getCreatedAt(): Date {
-    return this.created_at;
-  }
-
-  public getUpdatedAt(): Date {
-    return this.updated_at;
   }
 }
