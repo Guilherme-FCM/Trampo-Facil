@@ -1,4 +1,4 @@
-import { Entity, Column, OneToMany } from "typeorm";
+import { Entity, Column, OneToMany, JoinTable } from "typeorm";
 import { Experiencia } from "./Experiencia";
 import { Usuario } from "./Usuario";
 import { Endereco } from "./Endereco";
@@ -17,7 +17,10 @@ export class Candidato extends Usuario {
   @Column({ nullable: true })
   public sexo: string;
 
-  @OneToMany(() => Experiencia, experiencia => experiencia.candidato)
+  @JoinTable()
+  @OneToMany(() => Experiencia, experiencia => experiencia.candidato, {
+    eager: true
+  })
   public experiencias: Experiencia[];
 
   constructor(

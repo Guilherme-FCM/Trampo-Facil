@@ -9,7 +9,7 @@ export abstract class Usuario extends BaseEntity {
 	@Column()
 	public senha: string;
 
-  @OneToOne(() => Endereco)
+	@OneToOne(() => Endereco, { eager: true })
   @JoinColumn()
 	public endereco: Endereco;
 
