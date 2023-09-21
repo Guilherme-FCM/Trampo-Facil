@@ -1,7 +1,8 @@
-import { Column, Entity } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne } from "typeorm";
 import { TipoTurno } from "./enums/TipoTurno";
 import { TipoContrato } from "./enums/TipoContrato";
 import { BaseEntity } from "./BaseEntity";
+import { Empresa } from "./Empresa";
 
 @Entity()
 export class Vaga extends BaseEntity {
@@ -19,6 +20,9 @@ export class Vaga extends BaseEntity {
   
   @Column({ type: "enum", enum: TipoContrato })
   public contrato: TipoContrato;
+
+  @ManyToOne(() => Empresa, empresa => empresa.vagas)
+  public empresa!: Empresa; 
 
   constructor(
     cargo: string,
