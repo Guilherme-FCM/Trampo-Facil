@@ -1,4 +1,5 @@
-import { DeepPartial } from "typeorm";
+import { DeepPartial, FindOptionsWhere } from "typeorm";
+import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import dataSource from "../database";
 import { BaseEntity } from "../entities/BaseEntity";
 import { RepositoryInterface } from "./RepositoryInterface";
@@ -18,15 +19,15 @@ export class BaseRepository<E extends BaseEntity> implements RepositoryInterface
   }
 
   async findBy(data: DeepPartial<E>): Promise<E[]> {
-    return this.repository.findBy(data);
+    return this.repository.findBy(data as FindOptionsWhere<E>);
   }
 
-  async findById(id: E['id']): Promise<E | null> {
+  async findById(id: any): Promise<E | null> {
     return this.repository.findOneBy({ id });
   }
 
   async update(id: number, data: DeepPartial<E>): Promise<E | null> {
-    const result = await this.repository.update(id, data);
+    const result = await this.repository.update(id, data as QueryDeepPartialEntity<E>);
     if (result.affected === 0) return null
     return this.findById(id);
   }
