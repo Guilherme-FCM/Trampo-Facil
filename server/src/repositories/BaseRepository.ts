@@ -6,6 +6,7 @@ import { RepositoryInterface } from "./RepositoryInterface";
 
 export class BaseRepository<E extends BaseEntity> implements RepositoryInterface<E> {
   constructor(
+    // TODO: use '{ new (): E }' type and rename param to 'entity'
     private readonly tableName: string,
     protected readonly repository = dataSource.getRepository<E>(tableName)
   ) {}

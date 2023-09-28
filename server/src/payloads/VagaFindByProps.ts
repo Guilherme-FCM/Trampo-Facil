@@ -1,4 +1,5 @@
 import { IsInt, IsObject, IsOptional, IsString } from "class-validator";
+import { EnderecoProps } from "./EnderecoProps";
 
 export class VagaFindByProps {
   @IsString()
@@ -11,9 +12,5 @@ export class VagaFindByProps {
 
   @IsObject()
   @IsOptional()
-  endereco_empresa?: {
-    id?: number;
-    cidade?: string;
-    uf?: string;
-  }
+  endereco_empresa?: EnderecoProps
 }
