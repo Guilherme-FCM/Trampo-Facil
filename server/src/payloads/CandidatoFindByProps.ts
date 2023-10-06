@@ -8,5 +8,5 @@ export class CandidatoFindByProps {
 
   @IsObject()
   @IsOptional()
-  endereco_candidato?: EnderecoProps
+  endereco?: EnderecoProps
 }

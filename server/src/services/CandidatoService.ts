@@ -2,49 +2,35 @@ import { Candidato } from "../entities/Candidato";
 import { CandidatoFindByProps } from "../payloads/CandidatoFindByProps";
 import { CandidatoRepository } from "../repositories/CandidatoRepository";
 import { EnderecoRepository } from "../repositories/EnderecoRepository";
-import { validate } from "../utils/validate";
 import { ServiceInterface } from "./ServiceInterface";
+import { Optional } from "../utils/Optional";
+import { validate } from "../utils/validate";
 
-export class CandidatoService implements ServiceInterface {
-    constructor (
-        private readonly repository = new CandidatoRepository(),
-        private readonly endereco = new EnderecoRepository(),
-    ) {}
+export class CandidatoService extends CandidatoRepository implements ServiceInterface {
+    private readonly endereco = new EnderecoRepository();
     
-    public async create(data: Candidato) {
-        await validate(data, Candidato);
-
+    public async create(params: Candidato) {
+        const data = validate(params, Candidato);
         await this.endereco.create(data.endereco);
-        return this.repository.create(data);
-    }
-
-    public async findAll() {
-        return this.repository.findAll();
+        return super.create(data);
     }
     
-    public findBy(params: CandidatoFindByProps) {
-        return this.repository.findBy({
+    public async findBy(params: CandidatoFindByProps) {
+        const data = validate(params, CandidatoFindByProps);
+        return super.findBy({
             experiencias: [{
-                cargo: params.cargo
+                cargo: data.cargo
             }],
             endereco: {
-                id: params.endereco_candidato?.id,
-                cidade: params.endereco_candidato?.cidade,
-                uf: params.endereco_candidato?.uf
+                id: data.endereco?.id,
+                cidade: data.endereco?.cidade,
+                uf: data.endereco?.uf
             }
         });
     }
 
-    public async findById(id: number) {
-        return this.repository.findById(id);
-    }
-
-    public async update(id: number, data: Candidato) {
-        await validate(data, Candidato);
-        return this.repository.update(id, data);
-    }
-
-    public async delete(id: number) {
-        return this.repository.delete(id);
+    public async update(id: number, params: Optional<Candidato>) {
+        const data = validate(params, Candidato);
+        return super.update(id, data);
     }
 }

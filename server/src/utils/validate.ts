@@ -1,8 +1,17 @@
-import { validateOrReject } from "class-validator";
+import { ValidationError, validateSync } from "class-validator";
+import { ValidationException } from "./ValidationException";
 
-// TODO: Return validation erros
-// TODO: Use '{ new (): T }' type || pegar de forma dinâmica
-export function validate<T extends Object>(params: Object, type: any) {
+export function validate<T extends Object>(params: Object, type: { new (): T }) {
   const data = Object.assign(new type(), params);
-  return validateOrReject(data);
+  const validationErrors = validateSync(data);
+  
+  if (validationErrors.length > 0) {
+    const errors = validationErrors.map(formatError)
+    throw new ValidationException(errors);
+  }
+  return data;
 }
+
+const formatError = (error: ValidationError) => ({
+  [error.property]: Object.values(error.constraints || [])
+});

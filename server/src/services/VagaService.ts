@@ -3,47 +3,31 @@ import { VagaFindByProps } from "../payloads/VagaFindByProps";
 import { validate } from "../utils/validate";
 import { Vaga } from "../entities/Vaga";
 import { ServiceInterface } from "./ServiceInterface";
+import { Optional } from "../utils/Optional";
 
-export class VagaService implements ServiceInterface {
-    constructor (
-        private readonly repository = new VagaRepository()
-    ) {}
-    
-    public async create(data: Vaga) {
-        await validate(data, Vaga);
-        return this.repository.create(data);
-    }
-
-    public async findAll() {
-        return this.repository.findAll();
+export class VagaService extends VagaRepository implements ServiceInterface {
+    public async create(params: Vaga) {
+        const data = validate(params, Vaga);
+        return super.create(data);
     }
 
     public async findBy(params: VagaFindByProps) {
-        await validate(params, VagaFindByProps);
-
-        return this.repository.findBy({
-            cargo: params.cargo,
+        const data = validate(params, VagaFindByProps);
+        return super.findBy({
+            cargo: data.cargo,
             empresa: {
-                id: params.id_empresa,
+                id: data.id_empresa,
                 endereco: {
-                    id: params.endereco_empresa?.id,
-                    cidade: params.endereco_empresa?.cidade,
-                    uf: params.endereco_empresa?.uf
+                    id: data.endereco_empresa?.id,
+                    cidade: data.endereco_empresa?.cidade,
+                    uf: data.endereco_empresa?.uf
                 } 
             }
         })
     }
 
-    public async findById(id: number) {
-        return this.repository.findById(id);
-    }
-
-    public async update(id: number, data: Vaga) {
-        await validate(data, Vaga);
-        return this.repository.update(id, data);
-    }
-
-    public async delete(id: number) {
-        return this.repository.delete(id);
+    public async update(id: number, params: Optional<Vaga>) {
+        const data = validate(params, Vaga);
+        return super.update(id, data);
     }
 }

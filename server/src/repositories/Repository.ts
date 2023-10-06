@@ -1,13 +1,14 @@
-import { DeepPartial, EntityTarget, FindOptionsWhere } from "typeorm";
+import { DeepPartial, EntitySchema, FindOptionsWhere } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
 import dataSource from "../database";
 import { BaseEntity } from "../entities/BaseEntity";
 import { RepositoryInterface } from "./RepositoryInterface";
 
-export class BaseRepository<E extends BaseEntity> implements RepositoryInterface<E> {
+export class Repository<E extends BaseEntity> implements RepositoryInterface<E> {
   constructor(
-    private readonly entity: EntityTarget<E> | string,
-    protected readonly repository = dataSource.getRepository<E>(entity),
+    // TODO: use '{ new (): E }' type and rename param to 'entity'
+    private readonly tableName: string,
+    protected readonly repository = dataSource.getRepository<E>(tableName)
   ) {}
   
   async create(data: E): Promise<E> {
