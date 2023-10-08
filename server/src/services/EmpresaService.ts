@@ -25,7 +25,7 @@ export class EmpresaService extends EmpresaRepository implements ServiceInterfac
         });
     }
 
-    public async update(id: number, params: Optional<Empresa>) {
+    public async update(id: any, params: Optional<Empresa>) {
         const data = validate(params, Empresa);
         return super.update(id, data);
     }

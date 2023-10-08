@@ -26,7 +26,7 @@ export class VagaService extends VagaRepository implements ServiceInterface {
         })
     }
 
-    public async update(id: number, params: Optional<Vaga>) {
+    public async update(id: any, params: Optional<Vaga>) {
         const data = validate(params, Vaga);
         return super.update(id, data);
     }

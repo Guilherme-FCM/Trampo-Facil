@@ -26,13 +26,13 @@ export class BaseRepository<E extends BaseEntity> implements RepositoryInterface
     return this.repository.findOneBy({ id });
   }
 
-  async update(id: number, data: DeepPartial<E>): Promise<E | null> {
+  async update(id: any, data: DeepPartial<E>): Promise<E | null> {
     const result = await this.repository.update(id, data as QueryDeepPartialEntity<E>);
     if (result.affected === 0) return null
     return this.findById(id);
   }
 
-  async delete(id: number): Promise<boolean> {
+  async delete(id: any): Promise<boolean> {
     const result = await this.repository.delete(id);
     return !!result.affected && result.affected === 1;
   }

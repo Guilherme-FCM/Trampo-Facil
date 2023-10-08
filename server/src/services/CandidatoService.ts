@@ -29,7 +29,7 @@ export class CandidatoService extends CandidatoRepository implements ServiceInte
         });
     }
 
-    public async update(id: number, params: Optional<Candidato>) {
+    public async update(id: any, params: Optional<Candidato>) {
         const data = validate(params, Candidato);
         return super.update(id, data);
     }

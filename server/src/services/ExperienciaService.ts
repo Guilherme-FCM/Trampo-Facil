@@ -15,7 +15,7 @@ export class ExperienciaService extends ExperienciaRepository implements Service
         return super.findBy(data)
     }
 
-    public async update(id: number, params: Optional<Experiencia>) {
+    public async update(id: any, params: Optional<Experiencia>) {
         const data = validate(params, Experiencia);
         return super.update(id, data);
     }
