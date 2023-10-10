@@ -10,12 +10,12 @@ export class Empresa extends Usuario {
     @Column()
     public cnpj!: string;
     
-    @Column({nullable:true})
+    @Column({ nullable: true })
     public areaAtuacao!: string;
 
     @JoinTable()
     @OneToMany(() => Vaga, vaga => vaga.empresa, {
-        eager:true
+        lazy: true
     })
     public vagas!: Vaga[];
 }

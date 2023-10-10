@@ -5,8 +5,9 @@ const service = new VagaService();
 
 export class VagaController {
   public static async index(request: Request, response: Response) {
+    const params = request.query;
     try {
-      const vagas = await service.findAll();
+      const vagas = await service.findBy(params);
       return response.status(200).json(vagas);
     } catch (error) {
       return response.status(400).json(error)

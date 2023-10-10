@@ -2,6 +2,10 @@ import express from "express";
 import connection from "./database";
 import routes from "./routes";
 
+// TODO: Class-transformer.plainToClass -> validate
+// TODO: Add @IsOptional() no Optional<>
+// TODO: ExceptionMiddleware -> remover try/catch dos controllers
+
 const app = express();
 
 app.use(express.json())

@@ -1,5 +1,5 @@
 import { ValidationError, validateSync } from "class-validator";
-import { ValidationException } from "./ValidationException";
+import { ValidationException } from "../exceptions/ValidationException";
 
 export function validate<T extends Object>(params: Object, type: { new (): T }) {
   const data = Object.assign(new type(), params);

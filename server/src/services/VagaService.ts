@@ -4,10 +4,18 @@ import { validate } from "../utils/validate";
 import { Vaga } from "../entities/Vaga";
 import { ServiceInterface } from "./ServiceInterface";
 import { Optional } from "../utils/Optional";
+import { EmpresaService } from "./EmpresaService";
+import { NotFoundException } from "../exceptions/NotFoundException";
 
 export class VagaService extends VagaRepository implements ServiceInterface {
+    private readonly empresa = new EmpresaService();
+
     public async create(params: Vaga) {
         const data = validate(params, Vaga);
+
+        const empresa = await this.empresa.findById(data.empresa);
+        if (!empresa) throw new NotFoundException('Empresa não encontrada');
+        
         return super.create(data);
     }
 

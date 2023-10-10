@@ -1,5 +1,5 @@
 export enum TipoTurno {
-  matutino, 
-  vespertino,
-  noturno,
+  matutino = 'matutino', 
+  vespertino = 'vespertino',
+  noturno = 'noturno',
 }

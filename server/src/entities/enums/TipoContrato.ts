@@ -1,4 +1,4 @@
 export enum TipoContrato {
-  CLT, 
-  PJ,
+  clt = 'clt', 
+  pj = 'pj',
 }
