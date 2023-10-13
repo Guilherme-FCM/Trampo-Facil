@@ -3,9 +3,9 @@ import { VagaFindByProps } from "../payloads/VagaFindByProps";
 import { validate } from "../utils/validate";
 import { Vaga } from "../entities/Vaga";
 import { ServiceInterface } from "./ServiceInterface";
-import { Optional } from "../utils/Optional";
 import { EmpresaService } from "./EmpresaService";
 import { NotFoundException } from "../exceptions/NotFoundException";
+import { UpdateVaga } from "../payloads/UpdateVaga";
 
 export class VagaService extends VagaRepository implements ServiceInterface {
     private readonly empresa = new EmpresaService();
@@ -34,8 +34,8 @@ export class VagaService extends VagaRepository implements ServiceInterface {
         })
     }
 
-    public async update(id: any, params: Optional<Vaga>) {
-        const data = validate(params, Vaga);
+    public async update(id: any, params: UpdateVaga) {
+        const data = validate(params, UpdateVaga);
         return super.update(id, data);
     }
 }
