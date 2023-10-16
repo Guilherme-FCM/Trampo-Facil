@@ -30,3 +30,15 @@ services:
       - ./server:/app/server
     depends_on:
       - database
+
+  client:
+    container_name: vue_client
+    build: 
+      dockerfile: ./docker/client.dockerfile
+      context: .
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app/client
+    depends_on:
+      - server
