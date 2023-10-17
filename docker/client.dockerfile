@@ -4,4 +4,4 @@ WORKDIR /app/client
 COPY ./client .
 
 EXPOSE 3000
-CMD yarn dev
+CMD yarn install; yarn dev;

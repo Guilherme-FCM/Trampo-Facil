@@ -40,5 +40,3 @@ services:
       - "3000:3000"
     volumes:
       - ./client:/app/client
-    depends_on:
-      - server
