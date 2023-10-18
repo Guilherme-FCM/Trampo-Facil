@@ -52,6 +52,7 @@ export class EmpresaController {
                 message: 'Recurso não encontrado'
             });
 
+            return response.status(200).json(empresa);
         } catch (error) {
             return ExceptionHandler.handle(response, error);
         }
@@ -68,6 +69,8 @@ export class EmpresaController {
                     message: "Não foi possivel remover este recurso"
                 });
             }
+            
+            return response.status(204).send();
         } catch (error) {
             return ExceptionHandler.handle(response, error);
         }

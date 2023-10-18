@@ -2,17 +2,18 @@ import { EmpresaRepository } from "../repositories/EmpresaRepository";
 import { ServiceInterface } from "./ServiceInterface";
 import { Empresa } from "../entities/Empresa";
 import { validate } from "../utils/validate";
-import { EmpresaFindByProps } from "../payloads/EmpresaFindByProps";
+import { EmpresaFindByProps } from "../payloads/empresa/EmpresaFindByProps";
 import { EnderecoRepository } from "../repositories/EnderecoRepository";
-import { Optional } from "../utils/Optional";
+import { UpdateEmpresa } from "../payloads/empresa/UpdateEmpresa";
+import { CreateEmpresa } from "../payloads/empresa/CreateEmpresa";
 
 export class EmpresaService extends EmpresaRepository implements ServiceInterface {
     private readonly endereco = new EnderecoRepository();
     
-    public async create(params: Empresa) {
-        const data = validate(params, Empresa);
+    public async create(params: CreateEmpresa) {
+        const data = validate(params, CreateEmpresa);
         await this.endereco.create(data.endereco);
-        return super.create(data);
+        return super.create(params as Empresa);
     }
 
     public async findBy(params: EmpresaFindByProps) {
@@ -25,8 +26,8 @@ export class EmpresaService extends EmpresaRepository implements ServiceInterfac
         });
     }
 
-    public async update(id: any, params: Optional<Empresa>) {
-        const data = validate(params, Empresa);
+    public async update(id: any, params: UpdateEmpresa) {
+        const data = validate(params, UpdateEmpresa);
         return super.update(id, data);
     }
 

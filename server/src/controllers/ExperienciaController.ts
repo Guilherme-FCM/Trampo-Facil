@@ -4,7 +4,7 @@ import { ExperienciaService } from "../services/ExperienciaService";
 
 const service = new ExperienciaService();
 
-export class VagaController {
+export class ExperienciaController {
   public static async index(request: Request, response: Response) {
     const params = request.query;
     try {

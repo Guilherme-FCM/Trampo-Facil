@@ -1,5 +1,5 @@
 import { IsObject, IsOptional, IsString } from "class-validator";
-import { EnderecoProps } from "./EnderecoProps";
+import { EnderecoProps } from "../endereco/EnderecoProps";
 
 export class CandidatoFindByProps {
   @IsString()

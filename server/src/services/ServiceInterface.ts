@@ -1,10 +1,8 @@
-import { BaseEntity } from "../entities/BaseEntity";
-
 export interface ServiceInterface {
-  create(data: BaseEntity): Promise<BaseEntity>;
-  findAll(): Promise<BaseEntity[]>;
-  findBy(data: any): Promise<BaseEntity[]>;
-  findById(id: string | number): Promise<BaseEntity | null>;
-  update(id: string | number, data: BaseEntity): Promise<BaseEntity | null>;
+  create(data: any): Promise<any>;
+  findAll(): Promise<any[]>;
+  findBy(data: any): Promise<any[]>;
+  findById(id: string | number): Promise<any | null>;
+  update(id: string | number, data: any): Promise<any | null>;
   delete(id: string | number): Promise<boolean>;
 } 
