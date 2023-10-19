@@ -26,7 +26,7 @@ export class BaseRepository<E extends BaseEntity> implements RepositoryInterface
     return this.repository.findOneBy({ id });
   }
 
-  async update(id: any, data: DeepPartial<E>): Promise<E | null> {
+  async update(id: any, data: E): Promise<E | null> {
     const result = await this.repository.update(id, data as QueryDeepPartialEntity<E>);
     if (result.affected === 0) return null
     return this.findById(id);

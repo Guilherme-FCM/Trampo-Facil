@@ -4,14 +4,13 @@ import { validate } from "../utils/validate";
 import { ServiceInterface } from "./ServiceInterface";
 import { EmpresaService } from "./EmpresaService";
 import { NotFoundException } from "../exceptions/NotFoundException";
-import { UpdateVaga } from "../payloads/vaga/UpdateVaga";
-import { CreateVaga } from "../payloads/vaga/CreateVaga";
+import { Vaga } from "../entities/Vaga";
 
 export class VagaService extends VagaRepository implements ServiceInterface {
     private readonly empresa = new EmpresaService();
 
-    public async create(params: CreateVaga) {
-        const data = validate(params, CreateVaga);
+    public async create(params: Vaga) {
+        const data = validate(params, Vaga);
 
         const empresa = await this.empresa.findById(data.empresa);
         if (!empresa) throw new NotFoundException('Empresa não encontrada');
@@ -34,8 +33,8 @@ export class VagaService extends VagaRepository implements ServiceInterface {
         })
     }
 
-    public async update(id: any, params: UpdateVaga) {
-        const data = validate(params, UpdateVaga);
+    public async update(id: any, params: Vaga) {
+        const data = validate(params, Vaga);
         return super.update(id, data);
     }
 }

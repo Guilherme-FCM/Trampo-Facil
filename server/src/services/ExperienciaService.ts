@@ -1,17 +1,16 @@
 import { ExperienciaRepository } from "../repositories/ExperienciaRepository";
 import { validate } from "../utils/validate";
 import { ServiceInterface } from "./ServiceInterface";
-import { CreateExperiencia } from "../payloads/experiencia/CreateExperiencia";
-import { UpdateExperiencia } from "../payloads/experiencia/UpdateExperiencia";
+import { Experiencia } from "../entities/Experiencia";
 
 export class ExperienciaService extends ExperienciaRepository implements ServiceInterface {
-    public async create(params: CreateExperiencia) {
-        const data = validate(params, CreateExperiencia);
+    public async create(params: Experiencia) {
+        const data = validate(params, Experiencia);
         return super.create(data);
     }
 
-    public async update(id: any, params: UpdateExperiencia) {
-        const data = validate(params, UpdateExperiencia);
+    public async update(id: any, params: Experiencia) {
+        const data = validate(params, Experiencia);
         return super.update(id, data);
     }
 }
