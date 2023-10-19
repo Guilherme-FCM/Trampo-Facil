@@ -7,14 +7,17 @@ import { NotFoundException } from "../exceptions/NotFoundException";
 import { Vaga } from "../entities/Vaga";
 
 export class VagaService extends VagaRepository implements ServiceInterface {
-    private readonly empresa = new EmpresaService();
+
+    private async validateAndGetEmpresa(empresaId: number): Promise<Boolean> {
+        const empresaService = new EmpresaService();
+        const empresa = await empresaService.findById(empresaId);
+        if (!empresa) throw new NotFoundException('Empresa não encontrada');
+        return true;
+    }
 
     public async create(params: Vaga) {
         const data = validate(params, Vaga);
-
-        const empresa = await this.empresa.findById(data.empresa);
-        if (!empresa) throw new NotFoundException('Empresa não encontrada');
-        
+        await this.validateAndGetEmpresa(Number(data.empresa));
         return super.create(data);
     }
 
@@ -35,6 +38,7 @@ export class VagaService extends VagaRepository implements ServiceInterface {
 
     public async update(id: any, params: Vaga) {
         const data = validate(params, Vaga);
+        await this.validateAndGetEmpresa(Number(data.empresa));
         return super.update(id, data);
     }
 }

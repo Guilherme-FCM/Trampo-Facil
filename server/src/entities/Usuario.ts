@@ -5,13 +5,14 @@ import { IsNotEmpty, IsString, IsEmail, IsObject, IsOptional } from "class-valid
 
 export abstract class Usuario extends BaseEntity {
 	@Column()
-	@IsEmail()
+	@IsEmail({}, {message: "Defina um email válido"})
 	@IsString({ message: 'Email deve ser uma string' })
+	@IsNotEmpty({message: "Email não pode ser branca ou nula"})
 	public email!: string;
 
 	@Column()
 	@IsString({ message: 'Senha deve ser uma string' })
-	@IsNotEmpty({ message: 'Senha não pode ser nula' })
+	@IsNotEmpty({ message: 'Senha não pode branca ou nula' })
 	public senha!: string;
 
 	@JoinColumn()

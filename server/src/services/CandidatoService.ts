@@ -4,6 +4,7 @@ import { CandidatoRepository } from "../repositories/CandidatoRepository";
 import { EnderecoRepository } from "../repositories/EnderecoRepository";
 import { ServiceInterface } from "./ServiceInterface";
 import { validate } from "../utils/validate";
+import { Endereco } from "../entities/Endereco";
 
 export class CandidatoService extends CandidatoRepository implements ServiceInterface {
     private readonly endereco = new EnderecoRepository();
@@ -12,7 +13,7 @@ export class CandidatoService extends CandidatoRepository implements ServiceInte
         const data = validate(params, Candidato);
 
         if (data.endereco)
-            await this.endereco.create(data.endereco);
+            await this.endereco.create(validate(data.endereco, Endereco));
 
         return super.create(data);
     }
@@ -26,7 +27,7 @@ export class CandidatoService extends CandidatoRepository implements ServiceInte
         const data = validate(params, Candidato);
         
         if (data.endereco)
-            await this.endereco.update(data.endereco.id, data.endereco);
+            await this.endereco.update(data.endereco.id, validate(data.endereco, Endereco));
 
         return super.update(id, data);
     }

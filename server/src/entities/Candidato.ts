@@ -1,12 +1,13 @@
 import { Entity, Column, OneToMany, JoinTable } from "typeorm";
 import { Experiencia } from "./Experiencia";
 import { Usuario } from "./Usuario";
-import { IsString, IsDateString } from "class-validator";
+import { IsString, IsDateString, IsNotEmpty, IsInt } from "class-validator";
 
 @Entity()
 export class Candidato extends Usuario {
   @Column()
   @IsString({ message: 'Nome completo deve ser uma string' })
+  @IsNotEmpty({message: "Nome não deve ser branco ou nulo"})
   public nome_completo!: string;
 
   @Column()
