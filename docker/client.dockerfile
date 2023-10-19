@@ -3,5 +3,6 @@ FROM node:18-alpine
 WORKDIR /app/client
 COPY ./client .
 
-EXPOSE 3000
-CMD yarn install; yarn dev;
+EXPOSE 80
+RUN yarn install
+CMD yarn dev
