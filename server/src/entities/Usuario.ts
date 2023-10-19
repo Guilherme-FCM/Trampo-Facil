@@ -1,27 +1,23 @@
 import { Column, JoinColumn, OneToOne } from "typeorm"
 import { Endereco } from "./Endereco";
 import { BaseEntity } from "./BaseEntity";
+import { IsNotEmpty, IsString, IsEmail, IsObject, IsOptional } from "class-validator"
 
 export abstract class Usuario extends BaseEntity {
 	@Column()
-	public email: string;
+	@IsEmail({}, {message: "Defina um email válido"})
+	@IsString({ message: 'Email deve ser uma string' })
+	@IsNotEmpty({message: "Email não pode ser branca ou nula"})
+	public email!: string;
 
 	@Column()
-	public senha: string;
+	@IsString({ message: 'Senha deve ser uma string' })
+	@IsNotEmpty({ message: 'Senha não pode branca ou nula' })
+	public senha!: string;
 
-	@OneToOne(() => Endereco, { eager: true })
-  @JoinColumn()
-	public endereco: Endereco;
-
-	constructor (
-		email: string,
-		senha: string,
-		endereco: Endereco,
-	) {
-		super();
-	
-		this.email = email;
-		this.senha = senha;
-		this.endereco = endereco;
-	}
+	@JoinColumn()
+	@OneToOne(() => Endereco, { eager: true, onDelete: 'CASCADE' })
+	@IsOptional()
+	@IsObject({ message: 'Endereço deve ser válido' })
+	public endereco?: Endereco;
 }

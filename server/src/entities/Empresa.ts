@@ -1,38 +1,25 @@
 import { Column, Entity, JoinTable, OneToMany } from "typeorm";
 import { Usuario } from "./Usuario";
 import { Vaga } from "./Vaga";
-import { Endereco } from "./Endereco";
+import { IsString } from "class-validator";
 
 @Entity()
 export class Empresa extends Usuario {
     @Column()
-    public razao_social: string;
-    
+    @IsString({ message: 'Razão social deve ser uma string' })
+    public razao_social!: string;
+
     @Column()
-    public cnpj: string;
-    
-    @Column({nullable:true})
-    public areaAtuacao: string;
+    @IsString({message: 'CNPJ deve ser uma string'})
+    public cnpj!: string;
+
+    @Column({ type: "text", nullable: true })
+    @IsString({ message: 'Área de atuação deve ser uma string' })
+    public area_atuacao!: string;
 
     @JoinTable()
     @OneToMany(() => Vaga, vaga => vaga.empresa, {
-        eager:true
+        lazy: true
     })
-    public vagas: Vaga[];
-
-    constructor(
-        email: string,
-        senha: string,
-        endereco: Endereco,
-        razao_social: string,
-        cnpj: string,
-        areaAtuacao: string,
-        vagas: Vaga[],
-    ){
-        super(email, senha, endereco);
-        this.razao_social = razao_social;
-        this.cnpj = cnpj;
-        this.areaAtuacao = areaAtuacao;
-        this.vagas = vagas
-    }
+    public vagas!: Vaga[];
 }

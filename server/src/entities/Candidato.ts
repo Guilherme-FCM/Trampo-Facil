@@ -1,44 +1,30 @@
 import { Entity, Column, OneToMany, JoinTable } from "typeorm";
 import { Experiencia } from "./Experiencia";
 import { Usuario } from "./Usuario";
-import { Endereco } from "./Endereco";
+import { IsString, IsDateString, IsNotEmpty, IsInt } from "class-validator";
 
 @Entity()
 export class Candidato extends Usuario {
   @Column()
-  public nome_completo: string;
+  @IsString({ message: 'Nome completo deve ser uma string' })
+  @IsNotEmpty({message: "Nome não deve ser branco ou nulo"})
+  public nome_completo!: string;
 
   @Column()
-  public cpf: string;
+  @IsString({ message: 'CPF deve ser uma string' })
+  public cpf!: string;
 
   @Column()
-  public data_nascimento: Date;
+  @IsDateString({}, { message: 'Data de nascimento deve ser uma data válida' })
+  public data_nascimento!: Date;
 
   @Column({ nullable: true })
-  public sexo: string;
+  @IsString({ message: 'Sexo deve ser uma string' })
+  public sexo!: string;
 
   @JoinTable()
   @OneToMany(() => Experiencia, experiencia => experiencia.candidato, {
     eager: true
   })
-  public experiencias: Experiencia[];
-
-  constructor(
-    email: string,
-		senha: string,
-    nome_completo: string,
-    cpf: string,
-    data_nascimento: Date,
-    sexo: string,
-		endereco: Endereco,
-    experiencias: Experiencia[],
-  ) {
-    super(email, senha, endereco);
-    
-    this.nome_completo = nome_completo;
-    this.cpf = cpf;
-    this.data_nascimento = data_nascimento;
-    this.sexo = sexo;
-    this.experiencias = experiencias;
-  }
+  public experiencias!: Experiencia[];
 }
