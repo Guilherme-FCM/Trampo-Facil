@@ -4,5 +4,4 @@ WORKDIR /app/client
 COPY ./client .
 
 EXPOSE 80
-RUN yarn install
-CMD yarn dev
+CMD yarn install; yarn dev;
