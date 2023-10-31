@@ -40,3 +40,5 @@ services:
       - "80:80"
     volumes:
       - ./client:/app/client
+    depends_on:
+      - server
