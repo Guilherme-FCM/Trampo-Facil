@@ -8,6 +8,5 @@
 </script>
 
 <style scoped>
-/** REMOVER */
-* { height: 800px; }
+
 </style>

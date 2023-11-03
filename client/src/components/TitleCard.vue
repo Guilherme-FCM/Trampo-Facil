@@ -1,5 +1,5 @@
 <template>
-  <v-row justify="space-between" class="container py-2">
+  <v-row justify="space-between" class="container py-2 mb-5">
     <v-col align="center" cols="12">
       <h2>{{ props.title }}</h2>
     </v-col>
