@@ -22,7 +22,7 @@ import TitleCard from '@/components/TitleCard.vue';
 import First from './pages/First.vue';
 import Second from './pages/Second.vue';
 import Third from './pages/Third.vue';
-import { Login } from '@/types/Login';
+import type { Login } from '@/types/Login';
 
 const data = reactive({
   

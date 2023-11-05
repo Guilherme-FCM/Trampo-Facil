@@ -3,7 +3,7 @@
     <v-radio-group v-model="selected">
       <v-row justify="space-around">
         <v-col cols="5">
-        <v-card class="radio-card" :class="selected == 1 && 'selected-card'" @click="selectCard(1)">
+        <FormCard class="radio-card" :class="selected == 1 && 'selected-card'" @click="selectCard(1)">
           <v-row align="center" justify="space-between">
             <v-col>
               <h3>Candidato</h3>
@@ -13,10 +13,10 @@
             </v-col>
           </v-row>
           <p class="mt-2">Cadastre suas experiências e aplique para vagas</p>
-        </v-card>
+        </FormCard>
       </v-col>
       <v-col cols="5">
-        <v-card class="radio-card" :class="selected == 2 && 'selected-card'" @click="selectCard(2)">
+        <FormCard class="radio-card" :class="selected == 2 && 'selected-card'" @click="selectCard(2)">
           <v-row align="center" justify="space-between">
             <v-col>
               <h3>Empresa</h3>
@@ -26,7 +26,7 @@
             </v-col>
           </v-row>
           <p class="mt-2">Disponibilize vagas e encontre novos colaboradores</p>
-        </v-card>
+        </FormCard>
       </v-col>
     </v-row>
   </v-radio-group>
@@ -46,6 +46,7 @@
 </template>
 
 <script setup lang="ts">
+import FormCard from '@/components/FormCard.vue';
 import { computed } from 'vue';
 import { ref } from 'vue';
 
@@ -60,14 +61,10 @@ const disebled = computed(() => selected.value == 0)
 
 <style scoped>
 .radio-card {
-  border: 1px solid rgba(0, 0, 0, 0.15);
   cursor: pointer;
-  padding: 15px 20px;
 }
 
 .selected-card {
   border: 1px solid rgb(var(--v-theme-primary));
-  cursor: pointer;
-  padding: 15px 20px;
 }
 </style>
