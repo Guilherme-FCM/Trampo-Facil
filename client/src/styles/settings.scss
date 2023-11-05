@@ -8,3 +8,6 @@
 // @use 'vuetify/settings' with (
 //   $color-pack: false
 // );
+.text-primary {
+  color: rgb(var(--v-theme-primary));
+}

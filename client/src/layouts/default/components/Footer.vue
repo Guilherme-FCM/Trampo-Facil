@@ -12,6 +12,7 @@
 .footer {
   background-color: rgb(var(--v-theme-primary));
   color: white;
+  height: 60px !important;
   max-height: 60px;
   text-align: center;
 }
