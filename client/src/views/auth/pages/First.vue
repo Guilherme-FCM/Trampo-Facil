@@ -23,9 +23,10 @@
 
 <script lang="ts" setup>
 import InputText from '@/components/InputText.vue';
+import type { Login } from '@/types/Login';
 import { reactive } from 'vue';
 
-const form = reactive({
+const form = reactive<Login>({
   email: '',
   password: '',
 })
