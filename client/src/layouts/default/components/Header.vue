@@ -1,15 +1,8 @@
 <template>
-  <v-app-bar class="header px-4">
-    <v-row justify="space-between">
-      <v-col>
-        <Logo @click="router.push('/')"/>
-      </v-col>
-
-      <v-col align="end">
-        <v-btn class="mr-4"  @click="router.push('/login')">Login</v-btn>
-        <v-btn color="primary" variant="flat">Disponibiizar Vaga</v-btn>
-      </v-col>
-    </v-row>
+  <v-app-bar flat class="header px-4 border-b">
+    <Logo @click="router.push('/')"/>
+    <v-btn class="mr-4"  @click="router.push('/login')">Login</v-btn>
+    <v-btn color="primary" variant="flat">Disponibiizar Vaga</v-btn>
   </v-app-bar>
 </template>
 

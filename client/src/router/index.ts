@@ -20,7 +20,13 @@ const routes = [
         name: 'Register',
         component: () => import('@/views/auth/Register.vue'),
       },
+      {
+        path: '/vagancy/index/',
+        name: 'vagancy-index',
+        component: () => import('@/views/vacancy/Detail.vue'),
+      },
     ],
+
   },
 ]
 

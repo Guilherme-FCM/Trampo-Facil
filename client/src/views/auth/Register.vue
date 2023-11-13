@@ -25,7 +25,7 @@ import Third from './pages/Third.vue';
 import type { Login } from '@/types/Login';
 
 const data = reactive({
-  
+
 });
 
 const pages = ref(1);

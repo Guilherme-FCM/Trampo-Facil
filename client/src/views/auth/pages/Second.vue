@@ -32,10 +32,10 @@
   </v-radio-group>
   <v-row justify="center" class="mt-1">
     <v-col cols="11">
-      <v-btn 
-        @click="$emit('next', selected)" 
-        color="primary" 
-        variant="elevated" 
+      <v-btn
+        @click="$emit('next', selected)"
+        color="primary"
+        variant="elevated"
         :disabled="disebled"
         block>
         Selecionar Perfil

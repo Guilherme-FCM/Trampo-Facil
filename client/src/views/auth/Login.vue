@@ -5,14 +5,14 @@
       class="card mx-auto"
       variant="outlined"
     >
-      <InputText 
-        v-model="form.email" 
-        title="E-mail" 
+      <InputText
+        v-model="form.email"
+        title="E-mail"
         placeholder="exemplo@mail.com" />
 
-      <InputText 
-        v-model="form.password" 
-        title="Senha" 
+      <InputText
+        v-model="form.password"
+        title="Senha"
         placeholder="*******" />
 
       <v-btn @click="submit" color="primary" variant="elevated" block>Login</v-btn>
@@ -20,7 +20,7 @@
       <v-row class="mt-1 text-center">
         <v-col>
           <p>
-            Não Possui uma conta? 
+            Não Possui uma conta?
             <strong class="link" @click="$router.push('/register')">Cadastre-se</strong>
           </p>
         </v-col>
@@ -43,7 +43,7 @@ const form = reactive<Login>({
 })
 
 function submit() {
-  
+
 }
 
 </script>

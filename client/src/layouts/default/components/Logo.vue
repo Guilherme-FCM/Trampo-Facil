@@ -1,7 +1,9 @@
 <template>
-  <v-app-bar-title class="container">
-      <v-icon icon="mdi-circle-slice-6" />
-      TRAMPO FÁCIL
+  <v-app-bar-title class="ma-4">
+    <v-img
+      width="100"
+      :src="logo"
+    />
     </v-app-bar-title>
 </template>
 
@@ -10,3 +12,6 @@
   cursor: pointer;
 }
 </style>
+<script setup>
+  import logo from "@/assets/logo.png"
+</script>

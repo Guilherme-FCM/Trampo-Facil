@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 const props = defineProps({
-  title: {
+  cargo: {
     type: String,
     required: true,
   },
