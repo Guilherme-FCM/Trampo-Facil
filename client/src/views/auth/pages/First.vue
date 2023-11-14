@@ -10,7 +10,7 @@
         placeholder="exemplo@mail.com" />
 
       <InputText 
-        v-model="form.password" 
+        v-model="form.senha" 
         title="Senha" 
         placeholder="*******" />
 
@@ -23,10 +23,12 @@
 import InputText from '@/components/InputText.vue';
 import FormCard from '@/components/FormCard.vue';
 import { reactive } from 'vue';
+import type { Login } from '@/types/Auth';
 
-const form = reactive({
+
+const form = reactive<Login>({
   email: '',
-  password: '',
+  senha: '',
 })
 </script>
 

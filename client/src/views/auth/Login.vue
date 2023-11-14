@@ -11,7 +11,7 @@
         placeholder="exemplo@mail.com" />
 
       <InputText
-        v-model="form.password"
+        v-model="form.senha"
         title="Senha"
         placeholder="*******" />
 
@@ -33,13 +33,13 @@
 import FormCard from '@/components/FormCard.vue';
 import InputText from '@/components/InputText.vue';
 import TitleCard from '@/components/TitleCard.vue';
-import type { Login } from '@/types/Login';
+import type { Login } from '@/types/Auth';
 import { reactive } from 'vue';
 
 
 const form = reactive<Login>({
   email: '',
-  password: '',
+  senha: '',
 })
 
 function submit() {
