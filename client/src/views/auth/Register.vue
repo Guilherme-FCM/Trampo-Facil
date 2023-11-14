@@ -11,8 +11,8 @@
     </v-window-item>
 
     <v-window-item :value="3">
-      <Candidato v-if="userType === 1" @next="finish" />
-      <Empresa v-else-if="userType === 2" @next="finish" />
+      <Candidato v-if="userType === 1" @next="registerCandidato" />
+      <Empresa v-else-if="userType === 2" @next="registerEmpresa" />
     </v-window-item>
   </v-window>
 </template>
@@ -26,13 +26,14 @@ import Candidato from './pages/Candidato.vue';
 import Empresa from './pages/Empresa.vue';
 import { Login, RegisterCandidato, RegisterEmpresa } from '@/types/Auth';
 import { useRegisterStore } from '@/store/register.store';
+import router from '@/router';
 
 const RegisterStore = useRegisterStore();
 const userType = ref(0);
 
 const pages = ref(1);
 function goToSecondPage(form: Login) {
-  RegisterStore.$state = { ...RegisterStore.$state, ...form };
+  updateFormData(form);
   pages.value = 2;
 }
 
@@ -41,9 +42,24 @@ function goToThirdPage(form: number) {
   pages.value = 3;
 }
 
-function finish(form: RegisterCandidato | RegisterEmpresa) {
+function registerCandidato(form: RegisterCandidato) {
+  updateFormData(form);
+  RegisterStore.registerCandidato();
+  goToLogin();
+}
+
+function registerEmpresa(form: RegisterEmpresa) {
+  updateFormData(form);
+  RegisterStore.registerEmpresa();
+  goToLogin();
+}
+
+function updateFormData(form: any) {
   RegisterStore.$state = { ...RegisterStore.$state, ...form };
-  RegisterStore.handle();
+}
+
+function goToLogin() {
+  router.push('/login');
 }
 </script>
 

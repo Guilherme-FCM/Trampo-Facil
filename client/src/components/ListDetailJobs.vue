@@ -14,11 +14,11 @@
             </v-col>
             <v-col align="start">
               <v-list-item-content>
-                <v-list-item-subtitle class="text-caption">{{ job.empresa }}</v-list-item-subtitle>
+                <v-list-item-subtitle class="text-caption">{{ job.empresa.razao_social }}</v-list-item-subtitle>
                 <v-list-item-title class="headline"><strong>{{ job.cargo }}</strong></v-list-item-title>
                 <v-list-item-subtitle>
                   <v-icon size="20" icon="mdi mdi-google-maps"></v-icon>
-                  {{ job.location }}
+                  {{ job.empresa.endereco?.descricao }}
                   <v-icon  size="20" icon="mdi mdi-dots-square"></v-icon>
                   {{ job.turno }}
                   <span class="ms-3">R$ {{ job.remuneracao }}</span>
@@ -40,7 +40,8 @@
 </template>
 <script lang="ts" setup>
 
-import { ref } from "vue";
+import { Vaga } from "@/types/Vaga";
+import { ref, PropType } from "vue";
 
 let offset = ref(5);
 function loadMoreJobs() {
@@ -50,9 +51,9 @@ function loadMoreJobs() {
 }
 const props = defineProps({
   jobList: {
-    type: Object,
+    type: Array as PropType<Vaga[]>,
     required: false,
-    default: () => {}
+    default: []
   }
 })
 </script>

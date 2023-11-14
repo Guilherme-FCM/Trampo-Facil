@@ -9,8 +9,13 @@ export const useRegisterStore = defineStore('register', {
   }),
 
   actions: {
-    async handle() {
+    async registerCandidato() {
       const response = await axios.post('/candidatos', this.$state);
+      return response.data
+    },
+
+    async registerEmpresa() {
+      const response = await axios.post('/empresas', this.$state);
       return response.data
     },
   },

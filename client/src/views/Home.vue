@@ -31,7 +31,7 @@
   <section class="jobs">
     <TitleHomePage title="Empregos Populares"/>
     <v-row class="pa-8">
-      <ListDetail :job-list="jobList"/>
+      <ListDetail :job-list="VagaStore.$state"/>
     </v-row>
   </section>
 </template>
@@ -42,9 +42,13 @@ import banner from "@/assets/banner.png"
 import TitleHomePage from '@/components/TitleHomePage.vue'
 import CardCategories from '@/components/CardCategories.vue'
 import ListDetail from '@/components/ListDetailJobs.vue'
+import { useVagasStore } from "@/store/vagas.store";
+
+const VagaStore = useVagasStore();
 
 let imgHeight = ref(0);
-onMounted(() => {
+onMounted(async () => {
+  VagaStore.getAll();
   setImgHeight();
   window.addEventListener('resize', setImgHeight);
 })
@@ -79,89 +83,6 @@ const categorias = [
   { id: 23, categoria: 'Serviços públicos' },
   { id: 24, categoria: 'Organizações sem fins lucrativos' }
 ];
-const jobList= [
-  {
-    id:1,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    especificacao: 'Laravel Developer',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:2,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:3,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:4,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:5,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:6,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:7,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:8,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:9,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-  {
-    id:10,
-    cargo: 'Fresher UI/UX Designer (3 Year Exp.)',
-    empresa: 'Match Company Limited',
-    location: 'Nairobi, Kenya',
-    turno: 'Full Time',
-    remuneracao: "15.000",
-  },
-]
 </script>
 
 <style scoped>
