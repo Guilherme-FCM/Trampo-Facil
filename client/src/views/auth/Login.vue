@@ -6,12 +6,12 @@
       variant="outlined"
     >
       <InputText
-        v-model="form.email"
+        v-model="LoginStore.email"
         title="E-mail"
         placeholder="exemplo@mail.com" />
 
       <InputText
-        v-model="form.senha"
+        v-model="LoginStore.senha"
         title="Senha"
         placeholder="*******" />
 
@@ -33,17 +33,15 @@
 import FormCard from '@/components/FormCard.vue';
 import InputText from '@/components/InputText.vue';
 import TitleCard from '@/components/TitleCard.vue';
-import type { Login } from '@/types/Auth';
-import { reactive } from 'vue';
+import router from '@/router';
+import { useLoginStore } from '@/store/auth.store';
 
 
-const form = reactive<Login>({
-  email: '',
-  senha: '',
-})
+const LoginStore = useLoginStore();
 
-function submit() {
-
+async function submit() {
+  const user = await LoginStore.login();
+  router.push('/')
 }
 
 </script>
@@ -55,3 +53,4 @@ function submit() {
 
 .link { cursor: pointer }
 </style>
+@/store/auth.store

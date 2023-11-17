@@ -1,4 +1,5 @@
 export interface Experiencia {
+  id: string;
   empresa: string;
   cargo: string;
   descricao: string;

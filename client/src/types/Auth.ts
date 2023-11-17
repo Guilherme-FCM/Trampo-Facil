@@ -17,3 +17,14 @@ export interface RegisterEmpresa {
   cnpj: string;
   area_atuacao: string;
 }
+
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+}
+
+export interface ApiLoginResponse {
+  user: User;
+  token: string;
+}

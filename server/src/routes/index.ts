@@ -3,8 +3,13 @@ import { VagaController } from "../controllers/VagaController"
 import { EmpresaController } from "../controllers/EmpresaController";
 import { CandidatoController } from "../controllers/CandidatoController";
 import { ExperienciaController } from "../controllers/ExperienciaController";
+import { AuthController } from "../controllers/AuthController";
 
 const routes = Router();
+
+// AUTENTICAÇÃO
+routes.post('/login', AuthController.login);
+routes.post('/logout', AuthController.logout);
 
 // VAGAS
 routes.get('/vagas', VagaController.index);

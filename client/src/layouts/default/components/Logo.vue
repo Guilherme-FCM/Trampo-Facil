@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar-title class="ma-4">
+  <v-app-bar-title>
     <v-img
       width="100"
       :src="logo"

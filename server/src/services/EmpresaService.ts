@@ -24,7 +24,8 @@ export class EmpresaService extends EmpresaRepository implements ServiceInterfac
             razao_social: data?.razao_social,
             endereco: {
                 uf: data?.estado
-            }
+            },
+            email: params.email,
         });
     }
 

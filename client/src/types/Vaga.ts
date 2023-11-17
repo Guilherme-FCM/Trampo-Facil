@@ -1,6 +1,7 @@
 import { Empresa } from "./Empresa";
 
 export interface Vaga {
+  id: string;
   cargo: string;
   especificacao: string;
   remuneracao?: number;
