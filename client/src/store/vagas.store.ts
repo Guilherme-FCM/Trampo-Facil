@@ -8,7 +8,7 @@ export const useVagasStore = defineStore('vaga', {
 
   actions: {
     async getAll() {
-      const response = await axios.get('/vagas');
+      const response = await axios.get<Vaga[]>('/vagas');
       this.$state = response.data;
     },
   },

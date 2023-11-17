@@ -1,7 +1,7 @@
 <template>
   <section class="banner">
     <v-row justify="space-around" class="banner-container">
-      <v-col cols="5">
+      <v-col cols="5" class="pt-10">
         <div class="title mb-8">
           <h1>Encontre uma <span class="text-primary">Vaga</span></h1>
           <h1>Que se Encaixa com</h1>
@@ -23,13 +23,13 @@
     </v-row>
   </section>
   <section class="popular-categories">
-    <TitleHomePage title="Categorias Populares"/>
+    <TitleHomePage title="Empresas Populares"/>
     <v-row class="pa-16">
-      <CardCategories :categories="categorias" />
+      <CardsEmpresa :empresas="EmpresaStore.$state" />
     </v-row>
   </section>
   <section class="jobs">
-    <TitleHomePage title="Empregos Populares"/>
+    <TitleHomePage title="Vagas Quentes"/>
     <v-row class="pa-8">
       <ListDetail :job-list="VagaStore.$state"/>
     </v-row>
@@ -40,15 +40,19 @@
 import { ref, onMounted } from "vue";
 import banner from "@/assets/banner.png"
 import TitleHomePage from '@/components/TitleHomePage.vue'
-import CardCategories from '@/components/CardCategories.vue'
+import CardsEmpresa from '@/components/CardsEmpresa.vue'
 import ListDetail from '@/components/ListDetailJobs.vue'
 import { useVagasStore } from "@/store/vagas.store";
+import { useEmpresaStore } from "@/store/empresa.store";
 
 const VagaStore = useVagasStore();
+const EmpresaStore = useEmpresaStore();
 
 let imgHeight = ref(0);
 onMounted(async () => {
   VagaStore.getAll();
+  EmpresaStore.getAll();
+
   setImgHeight();
   window.addEventListener('resize', setImgHeight);
 })
@@ -56,33 +60,6 @@ onMounted(async () => {
 function setImgHeight() {
  imgHeight.value = window.innerHeight - 60
 }
-
-const categorias = [
-  { id: 1, categoria: 'Agricultura' },
-  { id: 2, categoria: 'Pesca' },
-  { id: 3, categoria: 'Silvicultura' },
-  { id: 4, categoria: 'Mineração' },
-  { id: 5, categoria: 'Indústria manufatureira' },
-  { id: 6, categoria: 'Construção' },
-  { id: 7, categoria: 'Energia' },
-  { id: 8, categoria: 'Tecnologia da informação e eletrônicos' },
-  { id: 9, categoria: 'Educação' },
-  { id: 10, categoria: 'Saúde' },
-  { id: 11, categoria: 'Finanças' },
-  { id: 12, categoria: 'Varejo' },
-  { id: 13, categoria: 'Hotelaria e turismo' },
-  { id: 14, categoria: 'Transporte e logística' },
-  { id: 15, categoria: 'Serviços de TI' },
-  { id: 16, categoria: 'Consultoria' },
-  { id: 17, categoria: 'Entretenimento' },
-  { id: 18, categoria: 'Pesquisa e desenvolvimento' },
-  { id: 19, categoria: 'Tecnologia da informação avançada' },
-  { id: 20, categoria: 'Consultoria estratégica' },
-  { id: 21, categoria: 'Serviços de informação' },
-  { id: 22, categoria: 'Administração pública' },
-  { id: 23, categoria: 'Serviços públicos' },
-  { id: 24, categoria: 'Organizações sem fins lucrativos' }
-];
 </script>
 
 <style scoped>

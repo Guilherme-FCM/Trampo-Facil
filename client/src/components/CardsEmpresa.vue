@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col v-for="categoria in props.categories.slice(0, 10)" :key="categoria.id" class="align-center justify-center">
+    <v-col v-for="empresa in empresas.slice(0, 10)" :key="empresa.id">
       <v-card flat height="170" width="233" class="d-flex align-center justify-center">
         <v-card-title style="width: 230px" class="text-center">
           <v-container
@@ -10,20 +10,22 @@
               :src="technology"
             />
           </v-container>
-          {{ categoria.categoria }}
+          {{ empresa.razao_social }}
         </v-card-title>
       </v-card>
     </v-col>
   </v-row>
 </template>
 <script setup lang="ts">
+import { PropType } from "vue";
 import technology from "@/assets/technology.png";
+import { Empresa } from "@/types/Empresa";
 
-const props = defineProps({
-  categories: {
-    type: Object,
-    required: false,
-    default: () => ({})
+defineProps({
+  empresas: {
+    type: Array as PropType<Empresa[]>,
+    required: true,
+    default: []
   }
 })
 </script>

@@ -1,7 +1,7 @@
 <template>
   <v-app-bar-title>
     <v-img
-      width="100"
+      width="130"
       :src="logo"
     />
     </v-app-bar-title>
