@@ -25,7 +25,7 @@
   <section class="popular-categories">
     <TitleHomePage title="Empresas Populares"/>
     <v-row class="pa-16">
-      <CardsEmpresa :empresas="EmpresaStore.$state" />
+      <CardsEmpresa :empresas="EmpresasStore.$state" />
     </v-row>
   </section>
   <section class="jobs">
@@ -43,15 +43,15 @@ import TitleHomePage from '@/components/TitleHomePage.vue'
 import CardsEmpresa from '@/components/CardsEmpresa.vue'
 import ListDetail from '@/components/ListDetailJobs.vue'
 import { useVagasStore } from "@/store/vagas.store";
-import { useEmpresaStore } from "@/store/empresa.store";
+import { useEmpresasStore } from "@/store/empresas.store";
 
 const VagaStore = useVagasStore();
-const EmpresaStore = useEmpresaStore();
+const EmpresasStore = useEmpresasStore();
 
 let imgHeight = ref(0);
 onMounted(async () => {
   VagaStore.getAll();
-  EmpresaStore.getAll();
+  EmpresasStore.getAll();
 
   setImgHeight();
   window.addEventListener('resize', setImgHeight);

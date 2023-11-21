@@ -1,7 +1,11 @@
 <template>
   <v-row>
     <v-col v-for="empresa in empresas.slice(0, 10)" :key="empresa.id">
-      <v-card flat height="170" width="233" class="d-flex align-center justify-center">
+      <v-card 
+        flat height="170" width="233" 
+        class="d-flex align-center justify-center click" 
+        @click="$router.push(`/empresa/${empresa.id}`)"
+      >
         <v-card-title style="width: 230px" class="text-center">
           <v-container
             fluid
@@ -34,5 +38,9 @@ defineProps({
   border-radius: 50%;
   max-width: 80px;
   background-color: rgb(var(--v-theme-secondary));
+}
+
+.click {
+  cursor: pointer;
 }
 </style>

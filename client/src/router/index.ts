@@ -25,8 +25,12 @@ const routes = [
         name: 'vaga',
         component: () => import('@/views/Vaga.vue'),
       },
+      {
+        path: '/empresa/:id',
+        name: 'empresa',
+        component: () => import('@/views/Empresa.vue'),
+      },
     ],
-
   },
 ]
 

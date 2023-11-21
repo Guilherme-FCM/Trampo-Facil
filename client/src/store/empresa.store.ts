@@ -3,11 +3,11 @@ import axios from '@/utils/axios'
 import { defineStore } from 'pinia'
 
 export const useEmpresaStore = defineStore('empresa', {
-  state: (): Empresa[] => ([]),
+  state: (): Empresa => ({} as Empresa),
 
   actions: {
-    async getAll() {
-      const response = await axios.get<Empresa[]>('/empresas');
+    async getById(id: string) {
+      const response = await axios.get<Empresa>(`/empresas/${id}`);
       this.$state = response.data;
     },
   },
