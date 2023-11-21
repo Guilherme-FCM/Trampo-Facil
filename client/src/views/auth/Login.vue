@@ -7,11 +7,14 @@
     >
       <InputText
         v-model="LoginStore.email"
+        prepend-inner-icon="mdi-email"
+        type="email"
         title="E-mail"
         placeholder="exemplo@mail.com" />
 
       <InputText
         v-model="LoginStore.senha"
+        prepend-inner-icon="mdi-lock"
         title="Senha"
         placeholder="*******" />
 

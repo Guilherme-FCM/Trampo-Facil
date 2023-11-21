@@ -6,11 +6,13 @@
     >
       <InputText 
         v-model="form.email" 
+        prepend-inner-icon="mdi-email" 
         title="E-mail" 
         placeholder="exemplo@mail.com" />
 
       <InputText 
         v-model="form.senha" 
+        prepend-inner-icon="mdi-lock" 
         title="Senha" 
         placeholder="*******" />
 
