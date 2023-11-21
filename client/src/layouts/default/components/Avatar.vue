@@ -1,6 +1,7 @@
 <template>
       <v-menu>
         <template v-slot:activator="{ props }">
+          <span class="mr-4">Olá, {{ LoginStore.user?.name }}</span>
           <v-btn icon v-bind="props" >
             <v-avatar color="primary" size="large">
               <span v-if="initials" class="text-h6">{{ initials }}</span>

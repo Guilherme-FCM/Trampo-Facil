@@ -17,16 +17,16 @@
                 <v-list-item-subtitle class="text-caption">{{ job.empresa.razao_social }}</v-list-item-subtitle>
                 <v-list-item-title class="headline"><strong>{{ job.cargo }}</strong></v-list-item-title>
                 <v-list-item-subtitle>
-                  <v-icon size="20" icon="mdi mdi-google-maps"></v-icon>
+                  <v-icon v-show="job.empresa.endereco" size="20" icon="mdi mdi-google-maps"></v-icon>
                   {{ job.empresa.endereco?.descricao }}
-                  <v-icon  size="20" icon="mdi mdi-dots-square"></v-icon>
+                  <v-icon v-show="job.turno" size="20" icon="mdi mdi-dots-square"></v-icon>
                   {{ job.turno }}
-                  <span class="ms-3">R$ {{ job.remuneracao }}</span>
+                  <span class="ms-3">R$ {{ job.remuneracao || '---' }}</span>
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-col>
             <v-list-item-action class="me-10">
-              <v-btn color="primary" size="large" @click="$router.push('/vagancy/index')">Ver Detalhes</v-btn>
+              <v-btn color="primary" size="large" @click="$router.push(`/vaga/${job.id}`)">Ver Detalhes</v-btn>
             </v-list-item-action>
           </v-row>
         </v-list-item>

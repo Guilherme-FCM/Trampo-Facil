@@ -21,9 +21,9 @@ const routes = [
         component: () => import('@/views/auth/Register.vue'),
       },
       {
-        path: '/vagancy/index/',
-        name: 'vagancy-index',
-        component: () => import('@/views/vacancy/Detail.vue'),
+        path: '/vaga/:id',
+        name: 'vaga',
+        component: () => import('@/views/Vaga.vue'),
       },
     ],
 
