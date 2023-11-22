@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <v-col v-for="empresa in empresas.slice(0, 10)" :key="empresa.id">
+    <v-col v-for="empresa in empresas.slice(0, 10)" :key="empresa.id" cols="3">
       <v-card 
         flat height="170" width="233" 
         class="d-flex align-center justify-center click" 
