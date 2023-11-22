@@ -39,7 +39,7 @@ const form = reactive<RegisterCandidato>({
   nome_completo: '',
   cpf: '',
   data_nascimento: '',
-  sexo: '',
+  sexo: 'Selecione o sexo',
 })
 </script>
 

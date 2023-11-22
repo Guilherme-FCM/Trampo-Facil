@@ -30,21 +30,30 @@
       </v-row>
     </FormCard>
   </v-container>
+  <ErrorAlert :text="error" v-model="alert"/>
 </template>
 
 <script lang="ts" setup>
 import FormCard from '@/components/FormCard.vue';
 import InputText from '@/components/InputText.vue';
 import TitleCard from '@/components/TitleCard.vue';
+import ErrorAlert from "@/components/ErrorAlert.vue";
 import router from '@/router';
 import { useLoginStore } from '@/store/auth.store';
-
+import { ref } from 'vue';
 
 const LoginStore = useLoginStore();
+const alert = ref(false)
+const error = ref('')
 
 async function submit() {
-  const user = await LoginStore.login();
-  router.push('/')
+  try {
+    await LoginStore.login();
+    router.push('/')
+  } catch (err: any) {
+    error.value = String(err.response?.data?.message)
+    alert.value = true
+  }
 }
 
 </script>
