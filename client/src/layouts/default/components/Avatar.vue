@@ -20,7 +20,7 @@
                 {{ LoginStore.user?.email }}
               </p>
               <v-divider class="my-3"></v-divider>
-              <v-btn rounded variant="text">
+              <v-btn rounded variant="text" @click="$router.push('/meu-perfil')">
                 Editar Perfil
               </v-btn>
               <v-divider class="my-3"></v-divider>
