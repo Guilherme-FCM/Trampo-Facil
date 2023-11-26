@@ -17,6 +17,8 @@ const props = defineProps({
   appendInnerIcon: String,
   prependInnerIcon: String,
   type: String,
+  error: Boolean,
+  errorMessages: String,
 })
 </script>
 

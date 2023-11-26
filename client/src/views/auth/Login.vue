@@ -10,13 +10,17 @@
         prepend-inner-icon="mdi-email"
         type="email"
         title="E-mail"
-        placeholder="exemplo@mail.com" />
+        placeholder="exemplo@mail.com"
+        :error="!!errors.email"
+        :error-messages="errors.email" />
 
       <InputText
         v-model="LoginStore.senha"
         prepend-inner-icon="mdi-lock"
         title="Senha"
-        placeholder="*******" />
+        placeholder="*******"
+        :error="!!errors.senha"
+        :error-messages="errors.senha" />
 
       <v-btn @click="submit" color="primary" variant="elevated" block>Login</v-btn>
 
@@ -30,29 +34,33 @@
       </v-row>
     </FormCard>
   </v-container>
-  <ErrorAlert :text="error" v-model="alert"/>
 </template>
 
 <script lang="ts" setup>
 import FormCard from '@/components/FormCard.vue';
 import InputText from '@/components/InputText.vue';
 import TitleCard from '@/components/TitleCard.vue';
-import ErrorAlert from "@/components/ErrorAlert.vue";
 import router from '@/router';
 import { useLoginStore } from '@/store/auth.store';
 import { ref } from 'vue';
+import { EventEmitter } from '@/utils/event-emitter';
 
 const LoginStore = useLoginStore();
-const alert = ref(false)
-const error = ref('')
+const errors = ref({
+  email: '',
+  senha: '',
+})
 
 async function submit() {
   try {
     await LoginStore.login();
     router.push('/')
+    EventEmitter.emit('success', 'Login realizado!');
   } catch (err: any) {
-    error.value = String(err.response?.data?.message)
-    alert.value = true
+    const error = err.response?.data;
+
+    const message = error?.message || 'Houve um erro';
+    EventEmitter.emit('error', message);
   }
 }
 
@@ -65,4 +73,3 @@ async function submit() {
 
 .link { cursor: pointer }
 </style>
-@/store/auth.store
