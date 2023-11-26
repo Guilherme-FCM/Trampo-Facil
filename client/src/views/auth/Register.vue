@@ -15,7 +15,6 @@
       <Empresa v-else-if="userType === 2" @next="submit" />
     </v-window-item>
   </v-window>
-  <ErrorAlert :text="error" v-model="alert"/>
 </template>
 
 <script lang="ts" setup>
@@ -25,15 +24,13 @@ import First from './pages/First.vue';
 import Second from './pages/Second.vue';
 import Candidato from './pages/Candidato.vue';
 import Empresa from './pages/Empresa.vue';
-import ErrorAlert from "@/components/ErrorAlert.vue";
 import { Login, RegisterCandidato, RegisterEmpresa } from '@/types/Auth';
 import { useRegisterStore } from '@/store/register.store';
 import router from '@/router';
+import { EventEmitter } from '@/utils/event-emitter';
 
 const RegisterStore = useRegisterStore();
 const userType = ref(0);
-const alert = ref(false)
-const error = ref('')
 
 const pages = ref(1);
 function goToSecondPage(form: Login) {
@@ -59,9 +56,10 @@ async function submit(form: RegisterCandidato | RegisterEmpresa) {
     updateFormData(form);
     await register();
     goToLogin();
+    EventEmitter.emit('success', 'Cadastro finalizado. Efetue login!');
   } catch (err: any) {
-    alert.value = true
-    error.value = String(err.response?.data?.message)
+    const message = err.response?.data?.message || 'Houve um erro';
+    EventEmitter.emit('error', message);
   }
 }
 
