@@ -21,7 +21,7 @@
               </p>
               <v-divider class="my-3"></v-divider>
               <v-btn rounded variant="text" @click="$router.push('/meu-perfil')">
-                Editar Perfil
+                Meu Perfil
               </v-btn>
               <v-divider class="my-3"></v-divider>
               <v-btn rounded variant="text" color="error" @click="logout">

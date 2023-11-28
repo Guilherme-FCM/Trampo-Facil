@@ -19,10 +19,10 @@ defineProps({
 </script>
 
 <style scoped>
-::v-deep .v-overlay__scrim {
+:deep(.v-overlay__scrim) {
   display: none;
 }
-::v-deep .v-overlay__content {
+:deep(.v-overlay__content) {
   position: fixed;
   bottom: 0;
   max-width: 500px !important;

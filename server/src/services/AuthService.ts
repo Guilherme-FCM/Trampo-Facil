@@ -33,6 +33,7 @@ export class AuthService {
 
   private getUserData(user: Candidato | Empresa) {
     return {
+      id: user.id,
       name: user.nome_completo || user.razao_social,
       email: user.email
     }
