@@ -14,7 +14,7 @@
         :error="!!errors.email"
         :error-messages="errors.email" />
 
-      <InputText
+      <InputPassword
         v-model="LoginStore.senha"
         prepend-inner-icon="mdi-lock"
         title="Senha"
@@ -39,6 +39,7 @@
 <script lang="ts" setup>
 import FormCard from '@/components/FormCard.vue';
 import InputText from '@/components/InputText.vue';
+import InputPassword from '@/components/InputPassword.vue';
 import TitleCard from '@/components/TitleCard.vue';
 import router from '@/router';
 import { useLoginStore } from '@/store/auth.store';
@@ -50,14 +51,17 @@ const errors = ref({
   email: '',
   senha: '',
 })
+const loading = ref(false)
 
 async function submit() {
+  loading.value=!loading.value
   try {
     await LoginStore.login();
     router.push('/')
     EventEmitter.emit('success', 'Login realizado!');
   } catch (err: any) {
     const error = err.response?.data;
+    loading.value=!loading.value
 
     const message = error?.message || 'Houve um erro';
     EventEmitter.emit('error', message);
