@@ -9,3 +9,7 @@ export interface Vaga {
   contrato: string;
   empresa: Empresa;
 }
+
+export interface VagaValue {
+  valor: string
+}

@@ -6,7 +6,7 @@
           <InputText title="Nome Completo" v-model="form.nome_completo"/>
         </v-col>
         <v-col>
-          <InputText title="CPF" v-model="form.cpf" placeholder="###.###.###-##"/>
+          <InputText title="CPF" v-model="form.cpf" placeholder="###.###.###-##" :type="'cpf'"/>
         </v-col>
       </v-row>
       <v-row>

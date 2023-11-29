@@ -17,7 +17,7 @@
         type="password"
         placeholder="*******" />
 
-      <v-btn @click="emitNext" color="primary" variant="elevated" block>Continuar</v-btn>
+      <v-btn @click="$emit('next', form)" color="primary" variant="elevated" block>Continuar</v-btn>
     </FormCard>
   </v-container>
 </template>
@@ -28,18 +28,12 @@ import FormCard from '@/components/FormCard.vue';
 import InputPassword from '@/components/InputPassword.vue';
 import { reactive } from 'vue';
 import type { Login } from '@/types/Auth';
-import { ref, onMounted } from 'vue';
 
 
 const form = reactive<Login>({
   email: '',
   senha: '',
 })
-const loading  = ref(false)
-const emitNext = () => {
-  loading.value=!loading.value
-  this.$emit('next', form);
-}
 </script>
 
 <style scoped>

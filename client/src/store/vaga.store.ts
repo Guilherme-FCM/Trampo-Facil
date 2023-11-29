@@ -4,11 +4,11 @@ import { defineStore } from 'pinia'
 
 export const useVagaStore = defineStore('vaga', {
   state: (): Vaga => ({} as Vaga),
-
+  // TODO voltar aqui
   actions: {
     async getById(id: string) {
       const response = await axios.get<Vaga>(`/vagas/${id}`);
-      this,this.$state = response.data;
+      this.$state = response.data;
     },
   },
 })

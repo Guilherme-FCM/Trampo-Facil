@@ -11,5 +11,13 @@ export const useVagasStore = defineStore('vagas', {
       const response = await axios.get<Vaga[]>('/vagas');
       this.$state = response.data;
     },
+    async findByValue(valor?: string){
+      const response = await axios.get<Vaga[]>('/vagas/findByValue/', { params: { valor: valor}});
+      this.$state = response.data as Vaga[];
+
+      console.log(response.data)
+      console.log(this.$state)
+
+    }
   },
 })

@@ -10,10 +10,10 @@
         <span>Oportunidades escolhidas a dedo para trabalhar em casa, remotamente, freelance, período integral, meio período, contrato e estágios.</span>
         <v-row class="mt-8">
           <v-col cols="8" class="pa-0">
-            <v-text-field placeholder="Procure por uma vaga..." variant="solo" class="search-field" density="compact" hide-details></v-text-field>
+            <v-text-field v-model="form.valor" placeholder="Procure por uma vaga..." variant="solo" class="search-field" density="compact" hide-details></v-text-field>
           </v-col>
           <v-col class="pa-0">
-            <v-btn color="primary" size="large">Pesquisar</v-btn>
+            <v-btn @click="handlerSubmit" color="primary" size="large">Pesquisar</v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -31,7 +31,7 @@
   <section class="jobs">
     <TitleHomePage title="Vagas Quentes"/>
     <v-row class="pa-8">
-      <ListDetail :job-list="VagaStore.$state"/>
+      <ListDetail v-model="VagaStore.$state"/>
     </v-row>
   </section>
 </template>
@@ -44,11 +44,23 @@ import CardsEmpresa from '@/components/CardsEmpresa.vue'
 import ListDetail from '@/components/ListDetailJobs.vue'
 import { useVagasStore } from "@/store/vagas.store";
 import { useEmpresasStore } from "@/store/empresas.store";
+import { reactive } from 'vue'
+import type { VagaValue } from "@/types/Vaga";
+import router from "@/router";
 
 const VagaStore = useVagasStore();
 const EmpresasStore = useEmpresasStore();
 
+const form = reactive<VagaValue>({
+  valor: '',
+})
+
+function handlerSubmit(){
+  VagaStore.findByValue(form.valor)
+}
+
 let imgHeight = ref(0);
+
 onMounted(async () => {
   VagaStore.getAll();
   EmpresasStore.getAll();

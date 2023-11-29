@@ -13,6 +13,7 @@ routes.post('/logout', AuthController.logout);
 
 // VAGAS
 routes.get('/vagas', VagaController.index);
+routes.get('/vagas/findByValue', VagaController.findByValue);
 routes.get('/vagas/:id', VagaController.getById);
 routes.post('/vagas', VagaController.create);
 routes.put('/vagas/:id', VagaController.update);

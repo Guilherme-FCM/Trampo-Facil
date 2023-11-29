@@ -1,7 +1,7 @@
 <template>
   <v-container fluid >
     <v-list align="center">
-      <v-list-item-group v-for="(job, index) in jobList.slice(0, offset)" :key="index">
+      <v-list-item-group v-for="(job, index) in modelValue.slice(0, offset)" :key="index">
         <v-list-item max-height="200" height="100" class="text rounded-lg pa-0 mb-8" border elevation="1">
           <v-row align="center" no-gutters>
             <v-col cols="1">
@@ -46,11 +46,11 @@ import { ref, PropType } from "vue";
 let offset = ref(5);
 function loadMoreJobs() {
   offset.value += 5;
-  props.jobList.slice(offset.value, offset.value + 5);
+  props.modelValue.slice(offset.value, offset.value + 5);
 
 }
 const props = defineProps({
-  jobList: {
+  modelValue: {
     type: Array as PropType<Vaga[]>,
     required: false,
     default: []
