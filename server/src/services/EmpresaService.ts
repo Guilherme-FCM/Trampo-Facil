@@ -30,6 +30,7 @@ export class EmpresaService extends EmpresaRepository implements ServiceInterfac
     }
 
     public async update(id: any, params: Empresa) {
+        delete params.vagas;
         const data = validate(params, Empresa);
 
         if (data.endereco)

@@ -10,5 +10,9 @@ export const useEmpresaStore = defineStore('empresa', {
       const response = await axios.get<Empresa>(`/empresas/${id}`);
       this.$state = response.data;
     },
+
+    update(id: string) {
+      return axios.put(`/empresas/${id}`, this.$state);
+    },
   },
 })

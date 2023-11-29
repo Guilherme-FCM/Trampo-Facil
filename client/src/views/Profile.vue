@@ -8,12 +8,20 @@
           <div class="pb-3"><strong>E-mail: </strong><span>{{ usuario?.email }}</span></div>
           <div v-if="usuario?.sexo" class="pb-3"><strong>Sexo: </strong><span>{{ usuario?.sexo }}</span></div>
           <div v-if="usuario?.area_atuacao" class="pb-3"><strong>Área de Atuação: </strong><span>{{ usuario?.area_atuacao }}</span></div>
-          <div class="pb-3" v-if="usuario?.endereco?.descricao">
-            <strong>Endereço: </strong><span>{{ usuario?.endereco?.descricao }}</span></div>
+          <div v-if="usuario?.data_nascimento" class="pb-3"><strong>Data de Nascimento: </strong><span>{{ new Date(usuario?.data_nascimento) }}</span></div>
+          <div v-if="usuario?.endereco?.descricao" class="pb-3" >
+            <strong>Endereço: </strong><span>{{ usuario?.endereco?.descricao }}</span>
+          </div>
         </v-col>
         <v-col cols="3">
-          <v-card>
-            <v-img :src="semImg" />
+          <v-card @click="editProfileDialog = true" @mouseover="showIcon = true" @mouseleave="showIcon = false">
+            <v-img :src="semImg" class="image">
+              <v-row style="height: 100%;" align="center" justify="center">
+                <v-col cols="auto">
+                  <v-icon v-if="showIcon" icon="mdi-pencil"></v-icon>
+                </v-col>
+              </v-row>
+            </v-img>
           </v-card>
         </v-col>
     </v-row>
@@ -75,6 +83,46 @@
       </v-col>
     </v-row>
   </v-container>
+
+  <v-dialog v-model="editProfileDialog">
+    <FormCard class="pa-3 pb-5">
+      <v-row v-if="userType == 1">
+        <v-col cols="6">
+          <InputText title="Nome Completo" v-model="CandidatoStore.$state.nome_completo"/>
+        </v-col>
+        <v-col cols="6">
+          <InputText title="CPF" v-model="CandidatoStore.$state.cpf" placeholder="###.###.###-##"/>
+        </v-col>
+        <v-col cols="6">
+          <InputText title="Data de Nascimento" type="date" v-model="CandidatoStore.$state.data_nascimento"/>
+        </v-col>
+        <v-col cols="6">
+          <v-select
+            class="mt-7"
+            label="Sexo"
+            :items="['Masculino', 'Feminino', 'Outros']"
+            v-model="CandidatoStore.$state.sexo"
+            variant="outlined"
+            hide-details
+          />
+        </v-col>
+      </v-row>
+  
+      <v-row v-else>
+        <v-col cols="12">
+          <InputText title="Razão Social" v-model="EmpresaStore.$state.razao_social"/>
+        </v-col>
+        <v-col cols="6">
+          <InputText title="Área de Atuação" v-model="EmpresaStore.$state.area_atuacao"/>
+        </v-col>
+        <v-col cols="6">
+          <InputText title="CNPJ" v-model="EmpresaStore.$state.cnpj" placeholder="##.###.###/####-##"/>
+        </v-col>
+      </v-row>
+
+      <v-btn @click="edit" color="primary" variant="elevated" block>Atualizar Cadastro</v-btn>
+    </FormCard>
+  </v-dialog>
 </template>
 <script lang="ts" setup>
 import TitleCard from "@/components/TitleCard.vue";
@@ -87,17 +135,20 @@ import { useEmpresaStore } from "@/store/empresa.store";
 import { Candidato } from "@/types/Candidato";
 import { Empresa } from "@/types/Empresa";
 import { ref } from "vue";
+import FormCard from "@/components/FormCard.vue";
+import InputText from "@/components/InputText.vue";
 
 const CandidatoStore = useCandidatoStore()
 const EmpresaStore = useEmpresaStore()
 const LocalStorageStore = useLocalStorage()
 
 const usuario = ref<Candidato | Empresa>()
+const showIcon = ref(false)
+const editProfileDialog = ref(false)
+const userId = LocalStorageStore.user?.id
+const userType = LocalStorageStore.user?.type
 
 onMounted(async () => {
-  const userId = LocalStorageStore.user?.id
-  const userType = LocalStorageStore.user?.type
-
   if (!userId || !userType)
     return router.push('/404')
 
@@ -121,8 +172,21 @@ const experienciaHeaders = [
   'Cargo',
   'Descrição',
 ]
+
+async function edit() {
+  if (userType === 1) {
+    await CandidatoStore.update(userId)
+  } else if (userType === 2) {
+    await EmpresaStore.update(userId)
+  }
+  editProfileDialog.value = false
+}
 </script>
 
 <style scoped>
-
+.image:hover {
+  filter: brightness(0.7);
+  transition: 500ms;
+  cursor: pointer;
+}
 </style>

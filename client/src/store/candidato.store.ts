@@ -10,5 +10,9 @@ export const useCandidatoStore = defineStore('candidato', {
       const response = await axios.get<Candidato>(`/candidatos/${id}`);
       this.$state = response.data;
     },
+
+    update(id: string) {
+      return axios.put(`/candidatos/${id}`, this.$state);
+    },
   },
 })
