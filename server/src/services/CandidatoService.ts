@@ -24,6 +24,7 @@ export class CandidatoService extends CandidatoRepository implements ServiceInte
     }
 
     public async update(id: any, params: Candidato) {
+        delete params.experiencias;
         const data = validate(params, Candidato);
         
         if (data.endereco)

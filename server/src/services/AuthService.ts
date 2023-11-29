@@ -16,7 +16,6 @@ export class AuthService {
     const [candidato] = await this.candidato.findBy({ email });
     const [empresa] = await this.empresa.findBy({ email });
     const user = candidato || empresa
-    console.log(candidato, empresa, user)
     
     if (!user || user.senha != senha)
       throw new UnprocessableEntityException('Usuário não encontrado ou senha incorreta');
@@ -32,10 +31,12 @@ export class AuthService {
   }
 
   private getUserData(user: Candidato | Empresa) {
+    const type = user instanceof Candidato ? 1 : 2;
     return {
       id: user.id,
       name: user.nome_completo || user.razao_social,
-      email: user.email
+      email: user.email,
+      type,
     }
   }
 }
