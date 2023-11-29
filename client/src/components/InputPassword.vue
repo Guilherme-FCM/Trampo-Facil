@@ -5,6 +5,7 @@
       :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
       :type="showPassword ? 'string' : 'password'"
       @click:append-inner="showPassword=!showPassword"
+      @input="$emit('update:model-value', $event.target.value)"
       v-bind="props"
       required
     ></v-text-field>
