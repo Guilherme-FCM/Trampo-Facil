@@ -43,7 +43,7 @@ import InputPassword from '@/components/InputPassword.vue';
 import TitleCard from '@/components/TitleCard.vue';
 import router from '@/router';
 import { useLoginStore } from '@/store/auth.store';
-import { ref } from 'vue';
+import {onMounted, ref} from 'vue';
 import { EventEmitter } from '@/utils/event-emitter';
 
 const LoginStore = useLoginStore();
@@ -67,6 +67,12 @@ async function submit() {
     EventEmitter.emit('error', message);
   }
 }
+
+onMounted(()=>{
+  if (LoginStore.isLogged){
+    router.push('/')
+  }
+})
 
 </script>
 

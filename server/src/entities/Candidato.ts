@@ -2,6 +2,7 @@ import { Entity, Column, OneToMany, JoinTable } from "typeorm";
 import { Experiencia } from "./Experiencia";
 import { Usuario } from "./Usuario";
 import { IsString, IsDateString, IsNotEmpty, IsInt } from "class-validator";
+import {Candidatura} from "./Candidatura";
 
 @Entity()
 export class Candidato extends Usuario {
@@ -27,4 +28,8 @@ export class Candidato extends Usuario {
     eager: true
   })
   public experiencias!: Experiencia[];
+
+  @OneToMany(() => Candidatura, candidatura => candidatura.candidato)
+  public candidaturas?: Candidatura[];
+
 }

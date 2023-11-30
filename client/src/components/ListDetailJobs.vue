@@ -1,7 +1,7 @@
 <template>
   <v-container fluid >
     <v-list align="center">
-      <v-list-item-group v-for="(job, index) in modelValue.slice(0, offset)" :key="index">
+      <v-list-item v-for="(job, index) in modelValue.slice(0, offset)" :key="index">
         <v-list-item max-height="200" height="100" class="text rounded-lg pa-0 mb-8" border elevation="1">
           <v-row align="center" no-gutters>
             <v-col cols="1">
@@ -12,8 +12,8 @@
                 variant="text"
               >J</v-btn>
             </v-col>
-            <v-col align="start">
-              <v-list-item-content>
+            <v-col class="d-flex">
+              <v-list-item>
                 <v-list-item-subtitle class="text-caption">{{ job.empresa.razao_social }}</v-list-item-subtitle>
                 <v-list-item-title class="headline"><strong>{{ job.cargo }}</strong></v-list-item-title>
                 <v-list-item-subtitle>
@@ -23,14 +23,14 @@
                   {{ job.turno }}
                   <span class="ms-3">R$ {{ job.remuneracao || '---' }}</span>
                 </v-list-item-subtitle>
-              </v-list-item-content>
+              </v-list-item>
             </v-col>
             <v-list-item-action class="me-10">
               <v-btn color="primary" size="large" @click="$router.push(`/vaga/${job.id}`)">Ver Detalhes</v-btn>
             </v-list-item-action>
           </v-row>
         </v-list-item>
-      </v-list-item-group>
+      </v-list-item>
       <v-btn color="primary" size="large" @click="loadMoreJobs">
         Ver Mais
         <v-icon icon="mdi mdi-arrow-right-thin-circle-outline ps-2"></v-icon>

@@ -1,9 +1,10 @@
-import { Column, Entity, JoinTable, ManyToOne } from "typeorm";
+import {Column, Entity, JoinTable, ManyToOne, OneToMany} from "typeorm";
 import { TipoTurno } from "./enums/TipoTurno";
 import { TipoContrato } from "./enums/TipoContrato";
 import { BaseEntity } from "./BaseEntity";
 import { Empresa } from "./Empresa";
 import { IsEnum, IsInt, IsNumber, IsOptional, IsString } from "class-validator";
+import {Candidatura} from "./Candidatura";
 
 @Entity()
 export class Vaga extends BaseEntity {
@@ -34,5 +35,9 @@ export class Vaga extends BaseEntity {
   @JoinTable()
   @ManyToOne(() => Empresa, empresa => empresa.vagas, { eager: true })
   @IsInt({ message: 'Empresa deve ser um id existente' })
-  public empresa!: Empresa; 
+  public empresa!: Empresa;
+
+  @OneToMany(() => Candidatura, candidatura => candidatura.vaga)
+  public candidaturas?: Candidatura[];
+
 }

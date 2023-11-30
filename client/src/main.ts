@@ -6,7 +6,6 @@
 
 // Components
 import App from './App.vue'
-import Mask from 'vue-the-mask'
 
 // Composables
 import { createApp } from 'vue'
@@ -19,4 +18,3 @@ const app = createApp(App)
 registerPlugins(app)
 
 app.mount('#app')
-app.directive('v-mask', Mask)
