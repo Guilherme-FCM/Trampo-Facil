@@ -1,37 +1,10 @@
 <template>
-    <v-label class="mb-1">{{ title }}</v-label>
-    <v-text-field
-      variant="outlined"
-      v-bind="props"
-      @input="$emit('update:model-value', $event.target.value)" />
-</template>
-
-<script setup lang="ts">
-const props = defineProps({
-  title: {
-    type: String,
-    required: true,
-  },
-  placeholder: String,
-  modelValue: String,
-  appendInnerIcon: String,
-  prependInnerIcon: String,
-  type: String,
-  error: Boolean,
-  errorMessages: String,
-})
-</script>
-
-<style scoped>
-
-</style>
-<!--
-<template>
   <v-label class="mb-1">{{ title }}</v-label>
   <v-text-field
     variant="outlined"
     :placeholder="placeholder"
     :model-value="formattedValue"
+    :type="type"
     @input="formatValue"
     @update:model-value="$emit('update:model-value', $event)"
   />
@@ -51,7 +24,7 @@ const props = defineProps({
   prependInnerIcon: String,
   type: {
     type: String,
-    validator: (value) => ['cpf', 'cnpj', 'celular', 'data'].includes(value),
+    validator: (value) => ['cpf', 'cnpj', 'celular', 'date'].includes(value),
     default: '',
   },
   error: Boolean,
@@ -135,4 +108,3 @@ watch(() => props.modelValue, (newValue) => {
 <style scoped>
 
 </style>
--->

@@ -11,18 +11,8 @@ export const useCandidaturaStore = defineStore('candidatura', {
 
   actions: {
     async candidatar(candidatura: object) {
-      try {
         const response = await axios.post<Candidatura>(`/candidaturas`, candidatura);
         this.$state = response.data;
-        EventEmitter.emit('sucess', 'Cadastro realizado!')
-      } catch (err: any) {
-        console.log(err)
-        const error = err.response?.data;
-
-        const message = error?.message || 'Houve um erro';
-        EventEmitter.emit('error', message);
-      }
-
     },
   },
 })

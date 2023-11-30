@@ -73,7 +73,8 @@ onMounted(() => {
 });
 
 function verEmpresa() {
-  if(VagaStore.$state.empresa.id === userId && userId == 2){
+  console.log(userId)
+  if(VagaStore.$state.empresa.id === userId && userType == 2){
     router.push('/meu-perfil')
   }else{
     const empresaId = VagaStore.$state.empresa.id;
@@ -84,8 +85,14 @@ function verEmpresa() {
 async function enviarCandidatura() {
   form.candidato = userId;
   form.vaga = VagaStore.$state.id
-  await CandidaturaStore.candidatar(form);
-  EventEmitter.emit('success', 'Login realizado!');
+  try {
+    await CandidaturaStore.candidatar(form);
+    EventEmitter.emit('success', 'Cadastro realizado!')
+  } catch (err: any) {
+    const error = err.response?.data;
+    const message = "Já esta cadastrado na vaga!";
+    EventEmitter.emit('info', message);
+  }
   candidatar.value = false
 }
 </script>

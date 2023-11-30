@@ -8,6 +8,7 @@
 
     <ErrorAlert :text="error.message" v-model="error.alert"/>
     <SuccessAlert :text="success.message" v-model="success.alert"/>
+    <InfoAlert :text="info.message" v-model="info.alert"/>
   </v-app>
 </template>
 
@@ -19,6 +20,7 @@ import ErrorAlert from "@/components/ErrorAlert.vue";
 import SuccessAlert from "@/components/SuccessAlert.vue";
 import { EventEmitter } from "@/utils/event-emitter";
 import { reactive } from 'vue';
+import InfoAlert from "@/components/InfoAlert.vue";
 
 const error = reactive({
   alert: false,
@@ -26,6 +28,11 @@ const error = reactive({
 })
 
 const success = reactive({
+  alert: false,
+  message: '',
+})
+
+const info = reactive({
   alert: false,
   message: '',
 })
@@ -42,9 +49,16 @@ EventEmitter.on('success', (message: string) => {
   setTimeout(clearAlerts, 2000)
 });
 
+EventEmitter.on('info', (message: string) => {
+  info.message = message;
+  info.alert = true
+  setTimeout(clearAlerts, 2000)
+});
+
 function clearAlerts() {
   error.alert = false
   success.alert = false
+  info.alert = false
 }
 
 </script>

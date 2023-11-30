@@ -9,9 +9,17 @@
           <div v-if="usuario?.sexo" class="pb-3"><strong>Sexo: </strong><span>{{ usuario?.sexo }}</span></div>
           <div v-if="usuario?.area_atuacao" class="pb-3"><strong>Área de Atuação: </strong><span>{{ usuario?.area_atuacao }}</span></div>
           <div v-if="usuario?.data_nascimento" class="pb-3"><strong>Data de Nascimento: </strong><span>{{ new Date(usuario?.data_nascimento) }}</span></div>
-          <div v-if="usuario?.endereco?.descricao" class="pb-3" >
-            <strong>Endereço: </strong><span>{{ usuario?.endereco?.descricao }}</span>
-          </div>
+          <v-row>
+            <v-col v-if="usuario?.endereco?.descricao">
+              <div class="pb-3">
+                <strong>Endereço:</strong>
+                <span>{{ usuario?.endereco?.descricao }}</span>
+              </div>
+            </v-col>
+            <v-col>
+              <v-icon class="mr-1" @click="getAddressInfo">mdi-map-marker-radius</v-icon>
+            </v-col>
+          </v-row>
         </v-col>
         <v-col cols="3">
           <v-card @click="editProfileDialog = true" @mouseover="showIcon = true" @mouseleave="showIcon = false">
@@ -26,16 +34,15 @@
         </v-col>
     </v-row>
     <v-row>
-      <v-col class="text-h5">
-        <div v-if="usuario?.experiencias"><strong>Minhas Experiências</strong></div> 
-        <div v-if="usuario?.vagas"><strong>Minhas Vagas</strong></div> 
-      </v-col>
       <v-col cols="auto">
         <v-btn>Criar</v-btn>
       </v-col>
     </v-row>
 
-    <v-row v-if="usuario?.experiencias">
+    <v-row class="text-center" v-if="usuario?.experiencias">
+      <v-col class="text-h5">
+        <div class="align-center text-center" v-if="usuario?.experiencias"><strong>Minhas Experiências</strong></div>
+      </v-col>
       <v-col cols="12" v-if="usuario.experiencias.length == 0">
         <div>Nenhuma experiência inserida</div>
       </v-col>
@@ -56,11 +63,17 @@
           </tbody>
         </v-table>
       </v-col>
+      <v-col cols="12">
+        <v-btn color="primary" @click="adicionarVaga">Adicionar Experiencia</v-btn>
+      </v-col>
     </v-row>
 
-    <v-row v-if="usuario?.vagas">
+    <v-row class="text-center" v-if="usuario?.vagas">
+      <v-col class="text-h5">
+        <div class="align-center text-center" v-if="usuario?.vagas"><strong>Minhas Vagas</strong></div>
+      </v-col>
       <v-col cols="12" v-if="usuario.vagas.length == 0">
-        <div>Nenhuma vaga inserida</div>
+        <div >Nenhuma vaga inserida</div>
       </v-col>
       <v-col cols="12" v-else>
         <v-table>
@@ -80,6 +93,9 @@
             </tr>
           </tbody>
         </v-table>
+      </v-col>
+      <v-col cols="12">
+        <v-btn color="primary" @click="adicionarVaga">Adicionar Vaga</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -107,7 +123,7 @@
           />
         </v-col>
       </v-row>
-  
+
       <v-row v-else>
         <v-col cols="12">
           <InputText title="Razão Social" v-model="EmpresaStore.$state.razao_social"/>
@@ -122,6 +138,23 @@
 
       <v-btn @click="edit" color="primary" variant="elevated" block>Atualizar Cadastro</v-btn>
     </FormCard>
+  </v-dialog>
+
+  <v-dialog v-model="showAddressDialog">
+    <v-card>
+      <v-card-title>Informações do Endereço</v-card-title>
+      <v-card-text>
+        <div v-if="addressInfo">
+          <p><strong>Logradouro:</strong> {{ addressInfo.logradouro }}</p>
+          <p><strong>Bairro:</strong> {{ addressInfo.bairro }}</p>
+          <p><strong>Cidade:</strong> {{ addressInfo.cidade }}</p>
+          <p><strong>Estado:</strong> {{ addressInfo.estado }}</p>
+        </div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" @click="showAddressDialog = false">Fechar</v-btn>
+      </v-card-actions>
+    </v-card>
   </v-dialog>
 </template>
 <script lang="ts" setup>
@@ -147,6 +180,8 @@ const showIcon = ref(false)
 const editProfileDialog = ref(false)
 const userId = LocalStorageStore.user?.id
 const userType = LocalStorageStore.user?.type
+
+const showAddressDialog = ref(false);
 
 onMounted(async () => {
   if (!userId || !userType)
@@ -174,6 +209,7 @@ const experienciaHeaders = [
 ]
 
 async function edit() {
+  console.log(usuario)
   if (userType === 1) {
     await CandidatoStore.update(userId)
   } else if (userType === 2) {
@@ -181,6 +217,21 @@ async function edit() {
   }
   editProfileDialog.value = false
 }
+
+async function getAddressInfo() {
+  try {
+    const response = await fetch('https://viacep.com.br/ws/77020050/json/');
+    const data = await response.json();
+    console.log(data)
+
+    addressInfo.value = data;
+    showAddressDialog.value = true;
+  } catch (error) {
+    console.error('Erro ao obter informações do endereço:', error);
+  }
+}
+
+const addressInfo = ref<any>(null);
 </script>
 
 <style scoped>

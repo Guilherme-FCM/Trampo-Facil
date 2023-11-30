@@ -23,7 +23,7 @@
 export default {
   methods: {
     voltarPagina() {
-      this.$router.go(-2);
+      this.$router.go(-1);
     },
     irPaginaInicial() {
       this.$router.push('/');

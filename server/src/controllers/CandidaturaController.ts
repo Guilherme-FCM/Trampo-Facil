@@ -38,7 +38,6 @@ export class CandidaturaController{
             const candidatura = await service.create(body);
             return response.status(200).json(candidatura);
         } catch (error) {
-            console.log(error)
             return ExceptionHandler.handle(response, error);
         }
     }

@@ -11,7 +11,7 @@
           <InputText title="Área de Atuação" v-model="form.area_atuacao"/>
         </v-col>
         <v-col>
-          <InputText title="CNPJ" v-model="form.cnpj" placeholder="##.###.###/####-##"/>
+          <InputText type="cnpj" title="CNPJ" v-model="form.cnpj" placeholder="##.###.###/####-##"/>
         </v-col>
       </v-row>
       <v-btn @click="$emit('next', form)" color="primary" variant="elevated" block>Finalizar Cadastro</v-btn>
