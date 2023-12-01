@@ -191,6 +191,9 @@ onMounted(async () => {
     await EmpresaStore.getById(userId)
     usuario.value = EmpresaStore.$state;
   }
+  if(!usuario.value.endereco){
+    usuario.value.endereco = {};
+  }
 });
 
 const vagaHeaders = [
