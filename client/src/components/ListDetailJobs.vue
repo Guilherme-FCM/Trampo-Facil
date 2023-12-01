@@ -1,10 +1,10 @@
 <template>
   <v-container fluid >
-    <v-list align="center">
+    <v-list>
       <v-list-item v-for="(job, index) in modelValue.slice(0, offset)" :key="index">
         <v-list-item max-height="200" height="100" class="text rounded-lg pa-0 mb-8" border elevation="1">
-          <v-row align="center" no-gutters>
-            <v-col cols="1">
+          <v-row no-gutters>
+            <v-col align="center" cols="1">
               <v-btn
                 style="background-color: rgb(var(--v-theme-primary)); color: #F6F7FA; border-radius: 50%"
                 class="ma-2 text text-h2"
@@ -12,7 +12,7 @@
                 variant="text"
               >J</v-btn>
             </v-col>
-            <v-col class="d-flex">
+            <v-col class="d-flex align-left">
               <v-list-item>
                 <v-list-item-subtitle class="text-caption">{{ job.empresa.razao_social }}</v-list-item-subtitle>
                 <v-list-item-title class="headline"><strong>{{ job.cargo }}</strong></v-list-item-title>
@@ -31,10 +31,16 @@
           </v-row>
         </v-list-item>
       </v-list-item>
-      <v-btn color="primary" size="large" @click="loadMoreJobs">
-        Ver Mais
-        <v-icon icon="mdi mdi-arrow-right-thin-circle-outline ps-2"></v-icon>
-      </v-btn>
+      <v-list-item align="center">
+          <v-btn 
+          color="primary" 
+          size="large" 
+          append-icon="mdi mdi-arrow-right-thin-circle-outline"
+          align="center"
+          @click="loadMoreJobs">
+          Ver Mais
+        </v-btn>
+      </v-list-item>
     </v-list>
   </v-container>
 </template>
