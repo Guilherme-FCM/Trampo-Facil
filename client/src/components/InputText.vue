@@ -5,6 +5,7 @@
     :placeholder="placeholder"
     :model-value="formattedValue"
     :type="type"
+    :disabled="disabled"
     @input="formatValue"
     @update:model-value="$emit('update:model-value', $event)"
   />
@@ -25,11 +26,15 @@ const props = defineProps({
   prependInnerIcon: String,
   type: {
     type: String,
-    validator: (value: string) => ['cpf', 'cnpj', 'celular', 'date'].includes(value),
+    validator: (value: string) => ['cpf', 'cnpj', 'celular', 'date', 'cep'].includes(value),
     default: '',
   },
   error: Boolean,
   errorMessages: String,
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 });
 
 const formattedValue = ref(props.modelValue);
@@ -88,6 +93,17 @@ const formatCelular = (value: string) => {
   return value;
 };
 
+const formatCEP = (value) => {
+  value = value.replace(/\D/g, '').slice(0, 8); // Limitando o CEP a 8 dígitos
+  if (value.length > 5) {
+    value = value.replace(/^(\d{5})(\d)/, '$1-$2');
+  }
+  if (value.length === 9) {
+    emit('ok', value);
+  }
+  return value;
+};
+
 const formatValue = (event: any) => {
   let value = event.target.value.replace(/\D/g, '');
 
@@ -100,6 +116,9 @@ const formatValue = (event: any) => {
       break;
     case 'celular':
       value = formatCelular(value);
+      break;
+    case 'cep':
+      value = formatCEP(value);
       break;
     default:
       // Se o tipo não for especificado ou não for nenhum dos tipos conhecidos, aceite texto normal

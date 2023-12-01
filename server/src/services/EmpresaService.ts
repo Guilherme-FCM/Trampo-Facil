@@ -33,8 +33,11 @@ export class EmpresaService extends EmpresaRepository implements ServiceInterfac
         delete params.vagas;
         const data = validate(params, Empresa);
 
-        if (data.endereco)
+        if (data.endereco?.id){
             await this.endereco.update(data.endereco.id, validate(data.endereco, Endereco));
+        }else {
+            await this.endereco.create(data.endereco);
+        }
 
         return super.update(id, data);
     }

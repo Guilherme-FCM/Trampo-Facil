@@ -16,9 +16,6 @@
                 <span>{{ usuario?.endereco?.descricao }}</span>
               </div>
             </v-col>
-            <v-col>
-              <v-icon class="mr-1" @click="getAddressInfo">mdi-map-marker-radius</v-icon>
-            </v-col>
           </v-row>
         </v-col>
         <v-col cols="3">
@@ -149,101 +146,33 @@
           <InputText title="CNPJ" v-model="EmpresaStore.$state.cnpj" placeholder="##.###.###/####-##"/>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col cols="6">
+          <InputText @ok="getAddressInfo" type="cep" title="CEP" v-model="usuario.endereco.cep"/>
+        </v-col>
+        <v-col cols="4">
+          <InputText disabled title="Cidade" v-model="usuario.endereco.cidade"/>
+        </v-col>
+        <v-col cols="62">
+          <InputText disabled title="UF" v-model="usuario.endereco.uf"/>
+        </v-col>
+        <v-col cols="6">
+          <InputText disabled title="Bairro" v-model="usuario.endereco.bairro"/>
+        </v-col>
+        <v-col cols="6">
+          <InputText title="Complemento " v-model="usuario.endereco.descricao"/>
+        </v-col>
+      </v-row>
 
       <v-btn @click="edit" color="primary" variant="elevated" block>Atualizar Cadastro</v-btn>
     </FormCard>
-  </v-dialog>
-
-  <v-dialog v-model="showAddressDialog">
-    <v-card>
-      <v-card-title>Informações do Endereço</v-card-title>
-      <v-card-text>
-        <div v-if="addressInfo">
-          <p><strong>Logradouro:</strong> {{ addressInfo.logradouro }}</p>
-          <p><strong>Bairro:</strong> {{ addressInfo.bairro }}</p>
-          <p><strong>Cidade:</strong> {{ addressInfo.cidade }}</p>
-          <p><strong>Estado:</strong> {{ addressInfo.estado }}</p>
-        </div>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="primary" @click="showAddressDialog = false">Fechar</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-  <v-dialog v-model="addVagaDialog">
-    <v-card class="py-2">
-      <v-card-title>Adicione uma nova vaga</v-card-title>
-      <v-card-text>
-        <v-row>
-          <v-col cols="6">
-            <InputText title="Cargo" v-model="VagaStore.$state.cargo" />
-          </v-col>  
-          <v-col cols="6">
-            <InputText title="Remuneração" v-model="VagaStore.$state.remuneracao" type="number" />
-          </v-col>
-          <v-col cols="6">
-            <v-select
-              label="Turno"
-              :items="['matutino', 'vespertino', 'noturno']"
-              v-model="VagaStore.$state.turno"
-              variant="outlined"
-              hide-details
-            />
-          </v-col>
-          <v-col cols="6">
-            <v-select
-              label="Contrato"
-              :items="['clt', 'pj']"
-              v-model="VagaStore.$state.contrato"
-              variant="outlined"
-              hide-details
-            />
-          </v-col>
-          <v-col cols="12">
-            <InputText title="Especificação" v-model="VagaStore.$state.especificacao" />
-          </v-col>
-        </v-row>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn @click="createVaga" color="primary" variant="elevated" block>Adicionar</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
-  <v-dialog v-model="addExperienciaDialog">
-    <v-card class="py-2">
-      <v-card-title>Adicione uma nova Experiencia</v-card-title>
-      <v-card-text>
-        <v-row>
-          <v-col cols="6">
-            <InputText title="Nome da Empresa" v-model="ExperienciaStore.$state.empresa" />
-          </v-col>  
-          <v-col cols="6">
-            <InputText title="Cargo" v-model="ExperienciaStore.$state.cargo" />
-          </v-col>
-          <v-col cols="6">
-            <InputText title="Data de Início" v-model="ExperienciaStore.$state.data_inicio" type="date" />
-          </v-col>
-          <v-col cols="6">
-            <InputText title="Data de Fim" v-model="ExperienciaStore.$state.data_fim" type="date" />
-          </v-col>
-          <v-col cols="12">
-            <InputText title="Descrição" v-model="ExperienciaStore.$state.descricao" />
-          </v-col>
-        </v-row>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn @click="createExperiencia" color="primary" variant="elevated" block>Adicionar</v-btn>
-      </v-card-actions>
-    </v-card>
   </v-dialog>
 </template>
 <script lang="ts" setup>
 import TitleCard from "@/components/TitleCard.vue";
 import router from "@/router";
 import { useCandidatoStore } from "@/store/candidato.store";
-import { onMounted } from "vue";
+import {onMounted, reactive} from "vue";
 import semImg from '@/assets/sem_imagem.png';
 import { useLocalStorage } from "@/store/localStorage.store";
 import { useEmpresaStore } from "@/store/empresa.store";
@@ -251,6 +180,7 @@ import { useVagaStore } from "@/store/vaga.store";
 import { useExperienciaStore } from "@/store/experiencia.store";
 import { Candidato } from "@/types/Candidato";
 import { Empresa } from "@/types/Empresa";
+import { Endereco } from "@/types/Endereco";
 import { ref } from "vue";
 import FormCard from "@/components/FormCard.vue";
 import InputText from "@/components/InputText.vue";
@@ -274,13 +204,15 @@ const userType = LocalStorageStore.user?.type
 onMounted(async () => {
   if (!userId || !userType)
     return router.push('/404')
-
   if (userType === 1) {
     await CandidatoStore.getById(userId)
     usuario.value = CandidatoStore.$state;
   } else if (userType === 2) {
     await EmpresaStore.getById(userId)
     usuario.value = EmpresaStore.$state;
+  }
+  if(!usuario.value.endereco){
+    usuario.value.endereco = {};
   }
 });
 
@@ -298,7 +230,6 @@ const experienciaHeaders = [
 ]
 
 async function edit() {
-  console.log(usuario)
   if (userType === 1) {
     await CandidatoStore.update(userId)
   } else if (userType === 2) {
@@ -307,16 +238,26 @@ async function edit() {
   editProfileDialog.value = false
 }
 
-async function getAddressInfo() {
-  try {
-    const response = await fetch('https://viacep.com.br/ws/77020050/json/');
-    const data = await response.json();
-    console.log(data)
 
-    addressInfo.value = data;
-    showAddressDialog.value = true;
+// Endereço
+
+const showAddressDialog = ref(false);
+async function getAddressInfo(cep: string) {
+  const formatCEP = (value: string): string => {
+    return value.replace('-', '');
+  };
+
+  try {
+    const response = await fetch(`https://viacep.com.br/ws/${formatCEP(cep)}/json/`);
+    const data = await response.json();
+    usuario.value.endereco.cep = data.cep
+    usuario.value.endereco.bairro = data.logradouro
+    usuario.value.endereco.uf = data.uf
+    usuario.value.endereco.cidade = data.localidade
+    usuario.value.endereco.descricao = data.comenplemento
+
   } catch (error) {
-    console.error('Erro ao obter informações do endereço:', error);
+    EventEmitter.emit("info", "Não foi possivel obter o endereco!")
   }
 }
 
