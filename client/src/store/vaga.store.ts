@@ -10,5 +10,14 @@ export const useVagaStore = defineStore('vaga', {
       const response = await axios.get<Vaga>(`/vagas/${id}`);
       this.$state = response.data;
     },
+
+    async create() {
+      const response = await axios.post('/vagas', this.$state);
+      return response.data
+    },
+
+    async delete(id: string) {
+      return axios.delete(`/vagas/${id}`);
+    }
   },
 })

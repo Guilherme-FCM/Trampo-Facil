@@ -8,7 +8,7 @@
           <div class="pb-3"><strong>E-mail: </strong><span>{{ usuario?.email }}</span></div>
           <div v-if="usuario?.sexo" class="pb-3"><strong>Sexo: </strong><span>{{ usuario?.sexo }}</span></div>
           <div v-if="usuario?.area_atuacao" class="pb-3"><strong>Área de Atuação: </strong><span>{{ usuario?.area_atuacao }}</span></div>
-          <div v-if="usuario?.data_nascimento" class="pb-3"><strong>Data de Nascimento: </strong><span>{{ new Date(usuario?.data_nascimento) }}</span></div>
+          <div v-if="usuario?.data_nascimento" class="pb-3"><strong>Data de Nascimento: </strong><span>{{ formatDate(usuario?.data_nascimento) }}</span></div>
           <v-row>
             <v-col v-if="usuario?.endereco?.descricao">
               <div class="pb-3">
@@ -33,55 +33,61 @@
           </v-card>
         </v-col>
     </v-row>
-    <v-row>
-      <v-col cols="auto">
-        <v-btn>Criar</v-btn>
-      </v-col>
-    </v-row>
 
-    <v-row class="text-center" v-if="usuario?.experiencias">
+    <v-row v-if="usuario?.experiencias">
       <v-col class="text-h5">
         <div class="align-center text-center" v-if="usuario?.experiencias"><strong>Minhas Experiências</strong></div>
       </v-col>
       <v-col cols="12" v-if="usuario.experiencias.length == 0">
-        <div>Nenhuma experiência inserida</div>
+        <div class="text-center">Nenhuma experiência inserida</div>
       </v-col>
       <v-col cols="12" v-else>
         <v-table>
           <thead>
             <tr>
-              <th class="text-left" v-for="(title, i) in experienciaHeaders" :key="i">
+              <th v-for="(title, i) in experienciaHeaders" :key="i">
                 {{ title }}
               </th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(item, i) in usuario?.experiencias" :key="i">
               <td>{{ item.cargo }}</td>
-              <td>{{ item.descricao }}</td>
+              <td>{{ item.empresa }}</td>
+              <td>{{ formatDate(item.data_inicio) }} - {{ formatDate(item.data_fim) }}</td>
+              <td>
+                <v-btn 
+                  icon="mdi-delete" 
+                  color="error"
+                  variant="text"
+                  size="small"
+                  @click="deleteExperiencia(item.id)" />  
+              </td>
             </tr>
           </tbody>
         </v-table>
       </v-col>
       <v-col cols="12">
-        <v-btn color="primary" @click="adicionarVaga">Adicionar Experiencia</v-btn>
+        <v-btn color="primary" @click="addExperienciaDialog = true" block>Adicionar Experiencia</v-btn>
       </v-col>
     </v-row>
 
-    <v-row class="text-center" v-if="usuario?.vagas">
+    <v-row v-if="usuario?.vagas">
       <v-col class="text-h5">
         <div class="align-center text-center" v-if="usuario?.vagas"><strong>Minhas Vagas</strong></div>
       </v-col>
       <v-col cols="12" v-if="usuario.vagas.length == 0">
-        <div >Nenhuma vaga inserida</div>
+        <div class="text-center">Nenhuma vaga inserida</div>
       </v-col>
       <v-col cols="12" v-else>
         <v-table>
           <thead>
             <tr>
-              <th class="text-left" v-for="(title, i) in vagaHeaders" :key="i">
+              <th v-for="(title, i) in vagaHeaders" :key="i">
                 {{ title }}
               </th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -90,12 +96,20 @@
               <td>{{ item.remuneracao }}</td>
               <td>{{ item.turno }}</td>
               <td>{{ item.contrato }}</td>
+              <td>
+                <v-btn 
+                  icon="mdi-delete" 
+                  color="error"
+                  variant="text"
+                  size="small"
+                  @click="deleteVaga(item.id)" />  
+              </td>
             </tr>
           </tbody>
         </v-table>
       </v-col>
       <v-col cols="12">
-        <v-btn color="primary" @click="adicionarVaga">Adicionar Vaga</v-btn>
+        <v-btn color="primary" @click="addVagaDialog = true" block>Adicionar Vaga</v-btn>
       </v-col>
     </v-row>
   </v-container>
@@ -156,6 +170,74 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <v-dialog v-model="addVagaDialog">
+    <v-card class="py-2">
+      <v-card-title>Adicione uma nova vaga</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="6">
+            <InputText title="Cargo" v-model="VagaStore.$state.cargo" />
+          </v-col>  
+          <v-col cols="6">
+            <InputText title="Remuneração" v-model="VagaStore.$state.remuneracao" type="number" />
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              label="Turno"
+              :items="['matutino', 'vespertino', 'noturno']"
+              v-model="VagaStore.$state.turno"
+              variant="outlined"
+              hide-details
+            />
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              label="Contrato"
+              :items="['clt', 'pj']"
+              v-model="VagaStore.$state.contrato"
+              variant="outlined"
+              hide-details
+            />
+          </v-col>
+          <v-col cols="12">
+            <InputText title="Especificação" v-model="VagaStore.$state.especificacao" />
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="createVaga" color="primary" variant="elevated" block>Adicionar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="addExperienciaDialog">
+    <v-card class="py-2">
+      <v-card-title>Adicione uma nova Experiencia</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="6">
+            <InputText title="Nome da Empresa" v-model="ExperienciaStore.$state.empresa" />
+          </v-col>  
+          <v-col cols="6">
+            <InputText title="Cargo" v-model="ExperienciaStore.$state.cargo" />
+          </v-col>
+          <v-col cols="6">
+            <InputText title="Data de Início" v-model="ExperienciaStore.$state.data_inicio" type="date" />
+          </v-col>
+          <v-col cols="6">
+            <InputText title="Data de Fim" v-model="ExperienciaStore.$state.data_fim" type="date" />
+          </v-col>
+          <v-col cols="12">
+            <InputText title="Descrição" v-model="ExperienciaStore.$state.descricao" />
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="createExperiencia" color="primary" variant="elevated" block>Adicionar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 <script lang="ts" setup>
 import TitleCard from "@/components/TitleCard.vue";
@@ -165,23 +247,29 @@ import { onMounted } from "vue";
 import semImg from '@/assets/sem_imagem.png';
 import { useLocalStorage } from "@/store/localStorage.store";
 import { useEmpresaStore } from "@/store/empresa.store";
+import { useVagaStore } from "@/store/vaga.store";
+import { useExperienciaStore } from "@/store/experiencia.store";
 import { Candidato } from "@/types/Candidato";
 import { Empresa } from "@/types/Empresa";
 import { ref } from "vue";
 import FormCard from "@/components/FormCard.vue";
 import InputText from "@/components/InputText.vue";
+import { EventEmitter } from "@/utils/event-emitter";
 
 const CandidatoStore = useCandidatoStore()
+const ExperienciaStore = useExperienciaStore()
 const EmpresaStore = useEmpresaStore()
+const VagaStore = useVagaStore()
 const LocalStorageStore = useLocalStorage()
 
 const usuario = ref<Candidato | Empresa>()
 const showIcon = ref(false)
 const editProfileDialog = ref(false)
+const showAddressDialog = ref(false);
+const addVagaDialog = ref(false)
+const addExperienciaDialog = ref(false)
 const userId = LocalStorageStore.user?.id
 const userType = LocalStorageStore.user?.type
-
-const showAddressDialog = ref(false);
 
 onMounted(async () => {
   if (!userId || !userType)
@@ -205,7 +293,8 @@ const vagaHeaders = [
 
 const experienciaHeaders = [
   'Cargo',
-  'Descrição',
+  'Empresa',
+  'Período'
 ]
 
 async function edit() {
@@ -232,6 +321,54 @@ async function getAddressInfo() {
 }
 
 const addressInfo = ref<any>(null);
+
+async function createVaga() {
+  VagaStore.$state.empresa = userId;
+  VagaStore.$state.remuneracao = parseFloat(String(VagaStore.$state.remuneracao || 0))
+
+  try {
+    await VagaStore.create()
+    EventEmitter.emit('success', 'Vaga adicionada')
+    EmpresaStore.getById(userId)
+    addVagaDialog.value = false
+  } catch (error) {
+    EventEmitter.emit('error', 'Não foi possível registrar a vaga')
+  }
+}
+
+async function deleteVaga(id: string) {
+  await VagaStore.delete(id)
+  await EmpresaStore.getById(userId)
+  EventEmitter.emit('info', 'Vaga removida')
+}
+
+async function createExperiencia() {
+  ExperienciaStore.$state.candidato = userId;
+
+  try {
+    await ExperienciaStore.create()
+    EventEmitter.emit('success', 'Experiencia adicionada')
+    CandidatoStore.getById(userId)
+    addExperienciaDialog.value = false
+  } catch (error) {
+    EventEmitter.emit('error', 'Não foi possível registrar a experiencia')
+  }
+}
+
+async function deleteExperiencia(id: string) {
+  await ExperienciaStore.delete(id)
+  await CandidatoStore.getById(userId)
+  EventEmitter.emit('info', 'Experiencia removida')
+}
+
+function formatDate(value: string) {
+  const date = new Date(value)
+  const dia = String(date.getDate()).padStart(2, '0');
+  const mes = String(date.getMonth() + 1).padStart(2, '0');
+  const ano = date.getFullYear();
+
+  return `${dia}/${mes}/${ano}`;
+}
 </script>
 
 <style scoped>
