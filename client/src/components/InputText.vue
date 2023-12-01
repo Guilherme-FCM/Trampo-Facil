@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import { defineProps, ref, watch } from 'vue';
 
+const emit = defineEmits(['ok', 'update:model-value']);
 const props = defineProps({
   title: {
     type: String,
@@ -24,7 +25,7 @@ const props = defineProps({
   prependInnerIcon: String,
   type: {
     type: String,
-    validator: (value) => ['cpf', 'cnpj', 'celular', 'date'].includes(value),
+    validator: (value: string) => ['cpf', 'cnpj', 'celular', 'date'].includes(value),
     default: '',
   },
   error: Boolean,
@@ -33,7 +34,7 @@ const props = defineProps({
 
 const formattedValue = ref(props.modelValue);
 
-const formatCPF = (value) => {
+const formatCPF = (value: string) => {
   value = value.replace(/\D/g, '').slice(0, 11); // Limitando o CPF a 11 dígitos
   if (value.length > 3) {
     value = value.replace(/^(\d{3})(\d)/, '$1.$2');
@@ -44,10 +45,13 @@ const formatCPF = (value) => {
   if (value.length > 9) {
     value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
   }
+  if (value.length == 11) {
+    emit('ok', value);
+  }
   return value;
 };
 
-const formatCNPJ = (value) => {
+const formatCNPJ = (value: string) => {
   value = value.replace(/\D/g, '').slice(0, 14); // Limitando o CNPJ a 14 dígitos
   if (value.length > 2) {
     value = value.replace(/^(\d{2})(\d)/, '$1.$2');
@@ -61,10 +65,13 @@ const formatCNPJ = (value) => {
   if (value.length > 13) {
     value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
   }
+  if (value.length == 14) {
+    emit('ok', value);
+  }
   return value;
 };
 
-const formatCelular = (value) => {
+const formatCelular = (value: string) => {
   value = value.replace(/\D/g, '').slice(0, 11); // Limitando o celular a 11 dígitos
   if (value.length > 0) {
     value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
@@ -75,10 +82,13 @@ const formatCelular = (value) => {
   if (value.length > 10) {
     value = `${value.slice(0, 10)}-${value.slice(10)}`;
   }
+  if (value.length == 11) {
+    emit('ok', value);
+  }
   return value;
 };
 
-const formatValue = (event) => {
+const formatValue = (event: any) => {
   let value = event.target.value.replace(/\D/g, '');
 
   switch (props.type) {
