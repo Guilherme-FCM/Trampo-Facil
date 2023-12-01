@@ -74,4 +74,21 @@ export class VagaController {
       return ExceptionHandler.handle(response, error);
     }
   }
+
+  public static async findByValue(request: Request, response: Response){
+      const { valor } = request.query;
+    try {
+      const vagas = await service.findByValue(String(valor))
+
+      if (!vagas) return response.status(400).json({
+        message: 'Não foi possível buscar nada',
+      });
+
+      return response.status(200).json(vagas);
+    } catch (error) {
+      console.log(ExceptionHandler.handle(response, error))
+      return ExceptionHandler.handle(response, error);
+    }
+
+  }
 }

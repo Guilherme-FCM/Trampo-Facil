@@ -24,15 +24,20 @@ export class EmpresaService extends EmpresaRepository implements ServiceInterfac
             razao_social: data?.razao_social,
             endereco: {
                 uf: data?.estado
-            }
+            },
+            email: params.email,
         });
     }
 
     public async update(id: any, params: Empresa) {
+        delete params.vagas;
         const data = validate(params, Empresa);
 
-        if (data.endereco)
+        if (data.endereco?.id){
             await this.endereco.update(data.endereco.id, validate(data.endereco, Endereco));
+        }else {
+            await this.endereco.create(data.endereco);
+        }
 
         return super.update(id, data);
     }
