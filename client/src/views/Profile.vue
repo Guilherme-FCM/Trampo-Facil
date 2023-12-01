@@ -54,12 +54,12 @@
               <td>{{ item.empresa }}</td>
               <td>{{ formatDate(item.data_inicio) }} - {{ formatDate(item.data_fim) }}</td>
               <td>
-                <v-btn 
-                  icon="mdi-delete" 
+                <v-btn
+                  icon="mdi-delete"
                   color="error"
                   variant="text"
                   size="small"
-                  @click="deleteExperiencia(item.id)" />  
+                  @click="deleteExperiencia(item.id)" />
               </td>
             </tr>
           </tbody>
@@ -94,12 +94,12 @@
               <td>{{ item.turno }}</td>
               <td>{{ item.contrato }}</td>
               <td>
-                <v-btn 
-                  icon="mdi-delete" 
+                <v-btn
+                  icon="mdi-delete"
                   color="error"
                   variant="text"
                   size="small"
-                  @click="deleteVaga(item.id)" />  
+                  @click="deleteVaga(item.id)" />
               </td>
             </tr>
           </tbody>
@@ -146,7 +146,7 @@
           <InputText title="CNPJ" v-model="EmpresaStore.$state.cnpj" placeholder="##.###.###/####-##"/>
         </v-col>
       </v-row>
-<v-row>
+      <v-row>
         <v-col cols="6">
           <InputText @ok="getAddressInfo" type="cep" title="CEP" v-model="usuario.endereco.cep"/>
         </v-col>
@@ -168,23 +168,6 @@
     </FormCard>
   </v-dialog>
 
-  <v-dialog v-model="showAddressDialog">
-    <v-card>
-      <v-card-title>Informações do Endereço</v-card-title>
-      <v-card-text>
-        <div v-if="addressInfo">
-          <p><strong>Logradouro:</strong> {{ addressInfo.logradouro }}</p>
-          <p><strong>Bairro:</strong> {{ addressInfo.bairro }}</p>
-          <p><strong>Cidade:</strong> {{ addressInfo.cidade }}</p>
-          <p><strong>Estado:</strong> {{ addressInfo.estado }}</p>
-        </div>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn color="primary" @click="showAddressDialog = false">Fechar</v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
-
   <v-dialog v-model="addVagaDialog">
     <v-card class="py-2">
       <v-card-title>Adicione uma nova vaga</v-card-title>
@@ -192,7 +175,7 @@
         <v-row>
           <v-col cols="6">
             <InputText title="Cargo" v-model="VagaStore.$state.cargo" />
-          </v-col>  
+          </v-col>
           <v-col cols="6">
             <InputText title="Remuneração" v-model="VagaStore.$state.remuneracao" type="number" />
           </v-col>
@@ -232,7 +215,7 @@
         <v-row>
           <v-col cols="6">
             <InputText title="Nome da Empresa" v-model="ExperienciaStore.$state.empresa" />
-          </v-col>  
+          </v-col>
           <v-col cols="6">
             <InputText title="Cargo" v-model="ExperienciaStore.$state.cargo" />
           </v-col>
@@ -296,7 +279,7 @@ onMounted(async () => {
     await EmpresaStore.getById(userId)
     usuario.value = EmpresaStore.$state;
   }
-if(!usuario.value.endereco){
+  if(!usuario.value.endereco){
     usuario.value.endereco = {};
   }
 });
@@ -315,7 +298,7 @@ const experienciaHeaders = [
 ]
 
 async function edit() {
-    if (userType === 1) {
+  if (userType === 1) {
     await CandidatoStore.update(userId)
   } else if (userType === 2) {
     await EmpresaStore.update(userId)
