@@ -27,8 +27,12 @@ export class CandidatoService extends CandidatoRepository implements ServiceInte
         delete params.experiencias;
         const data = validate(params, Candidato);
         
-        if (data.endereco)
+        if (data.endereco?.id){
             await this.endereco.update(data.endereco.id, validate(data.endereco, Endereco));
+        }else {
+            await this.endereco.create(data.endereco);
+        }
+
 
         return super.update(id, data);
     }
