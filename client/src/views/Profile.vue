@@ -36,7 +36,7 @@
         <div class="align-center text-center" v-if="usuario?.experiencias"><strong>Minhas Experiências</strong></div>
       </v-col>
       <v-col cols="12" v-if="usuario.experiencias.length == 0">
-        <div class="text-center">Nenhuma experiência inserida</div>
+        <div>Nenhuma experiência inserida</div>
       </v-col>
       <v-col cols="12" v-else>
         <v-table>
@@ -75,7 +75,7 @@
         <div class="align-center text-center" v-if="usuario?.vagas"><strong>Minhas Vagas</strong></div>
       </v-col>
       <v-col cols="12" v-if="usuario.vagas.length == 0">
-        <div class="text-center">Nenhuma vaga inserida</div>
+        <div>Nenhuma vaga inserida</div>
       </v-col>
       <v-col cols="12" v-else>
         <v-table>
@@ -146,7 +146,7 @@
           <InputText title="CNPJ" v-model="EmpresaStore.$state.cnpj" placeholder="##.###.###/####-##"/>
         </v-col>
       </v-row>
-      <v-row>
+<v-row>
         <v-col cols="6">
           <InputText @ok="getAddressInfo" type="cep" title="CEP" v-model="usuario.endereco.cep"/>
         </v-col>
@@ -167,12 +167,97 @@
       <v-btn @click="edit" color="primary" variant="elevated" block>Atualizar Cadastro</v-btn>
     </FormCard>
   </v-dialog>
+
+  <v-dialog v-model="showAddressDialog">
+    <v-card>
+      <v-card-title>Informações do Endereço</v-card-title>
+      <v-card-text>
+        <div v-if="addressInfo">
+          <p><strong>Logradouro:</strong> {{ addressInfo.logradouro }}</p>
+          <p><strong>Bairro:</strong> {{ addressInfo.bairro }}</p>
+          <p><strong>Cidade:</strong> {{ addressInfo.cidade }}</p>
+          <p><strong>Estado:</strong> {{ addressInfo.estado }}</p>
+        </div>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn color="primary" @click="showAddressDialog = false">Fechar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="addVagaDialog">
+    <v-card class="py-2">
+      <v-card-title>Adicione uma nova vaga</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="6">
+            <InputText title="Cargo" v-model="VagaStore.$state.cargo" />
+          </v-col>  
+          <v-col cols="6">
+            <InputText title="Remuneração" v-model="VagaStore.$state.remuneracao" type="number" />
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              label="Turno"
+              :items="['matutino', 'vespertino', 'noturno']"
+              v-model="VagaStore.$state.turno"
+              variant="outlined"
+              hide-details
+            />
+          </v-col>
+          <v-col cols="6">
+            <v-select
+              label="Contrato"
+              :items="['clt', 'pj']"
+              v-model="VagaStore.$state.contrato"
+              variant="outlined"
+              hide-details
+            />
+          </v-col>
+          <v-col cols="12">
+            <InputText title="Especificação" v-model="VagaStore.$state.especificacao" />
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="createVaga" color="primary" variant="elevated" block>Adicionar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
+
+  <v-dialog v-model="addExperienciaDialog">
+    <v-card class="py-2">
+      <v-card-title>Adicione uma nova Experiencia</v-card-title>
+      <v-card-text>
+        <v-row>
+          <v-col cols="6">
+            <InputText title="Nome da Empresa" v-model="ExperienciaStore.$state.empresa" />
+          </v-col>  
+          <v-col cols="6">
+            <InputText title="Cargo" v-model="ExperienciaStore.$state.cargo" />
+          </v-col>
+          <v-col cols="6">
+            <InputText title="Data de Início" v-model="ExperienciaStore.$state.data_inicio" type="date" />
+          </v-col>
+          <v-col cols="6">
+            <InputText title="Data de Fim" v-model="ExperienciaStore.$state.data_fim" type="date" />
+          </v-col>
+          <v-col cols="12">
+            <InputText title="Descrição" v-model="ExperienciaStore.$state.descricao" />
+          </v-col>
+        </v-row>
+      </v-card-text>
+      <v-card-actions>
+        <v-btn @click="createExperiencia" color="primary" variant="elevated" block>Adicionar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 <script lang="ts" setup>
 import TitleCard from "@/components/TitleCard.vue";
 import router from "@/router";
 import { useCandidatoStore } from "@/store/candidato.store";
-import {onMounted, reactive} from "vue";
+import { onMounted } from "vue";
 import semImg from '@/assets/sem_imagem.png';
 import { useLocalStorage } from "@/store/localStorage.store";
 import { useEmpresaStore } from "@/store/empresa.store";
@@ -180,7 +265,6 @@ import { useVagaStore } from "@/store/vaga.store";
 import { useExperienciaStore } from "@/store/experiencia.store";
 import { Candidato } from "@/types/Candidato";
 import { Empresa } from "@/types/Empresa";
-import { Endereco } from "@/types/Endereco";
 import { ref } from "vue";
 import FormCard from "@/components/FormCard.vue";
 import InputText from "@/components/InputText.vue";
@@ -204,6 +288,7 @@ const userType = LocalStorageStore.user?.type
 onMounted(async () => {
   if (!userId || !userType)
     return router.push('/404')
+
   if (userType === 1) {
     await CandidatoStore.getById(userId)
     usuario.value = CandidatoStore.$state;
@@ -211,7 +296,7 @@ onMounted(async () => {
     await EmpresaStore.getById(userId)
     usuario.value = EmpresaStore.$state;
   }
-  if(!usuario.value.endereco){
+if(!usuario.value.endereco){
     usuario.value.endereco = {};
   }
 });
@@ -230,7 +315,7 @@ const experienciaHeaders = [
 ]
 
 async function edit() {
-  if (userType === 1) {
+    if (userType === 1) {
     await CandidatoStore.update(userId)
   } else if (userType === 2) {
     await EmpresaStore.update(userId)
@@ -241,7 +326,6 @@ async function edit() {
 
 // Endereço
 
-const showAddressDialog = ref(false);
 async function getAddressInfo(cep: string) {
   const formatCEP = (value: string): string => {
     return value.replace('-', '');
