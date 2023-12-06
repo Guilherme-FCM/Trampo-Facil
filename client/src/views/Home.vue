@@ -1,23 +1,23 @@
 <template>
   <section class="banner">
     <v-row justify="space-around" class="banner-container">
-      <v-col cols="5" class="pt-10">
+      <v-col cols="12" md="5" class="pt-10">
         <div class="title mb-8">
-          <h1>Encontre uma <span class="text-primary">Vaga</span></h1>
-          <h1>Que se Encaixa com</h1>
-          <h1>Suas <span class="text-primary">Experiências</span></h1>
+          <h1 class="text-h3">Encontre uma <span class="text-primary">Vaga</span></h1>
+          <h1 class="text-h3">Que se Encaixa com</h1>
+          <h1 class="text-h3">Suas <span class="text-primary">Experiências</span></h1>
         </div>
         <span>Oportunidades escolhidas a dedo para trabalhar em casa, remotamente, freelance, período integral, meio período, contrato e estágios.</span>
         <v-row class="mt-8">
           <v-col cols="8" class="pa-0">
             <v-text-field v-model="form.valor" placeholder="Procure por uma vaga..." variant="solo" class="search-field" density="compact" hide-details></v-text-field>
           </v-col>
-          <v-col class="pa-0">
+          <v-col cols="4" class="pa-0">
             <v-btn @click="handlerSubmit" color="primary" size="large">Pesquisar</v-btn>
           </v-col>
         </v-row>
       </v-col>
-      <v-col cols="4" class="pa-0">
+      <v-col cols="12" md="4" class="pa-0 mt-8">
         <v-img :src="banner" :height="imgHeight"></v-img>
       </v-col>
     </v-row>
@@ -31,7 +31,7 @@
   <section class="jobs">
     <TitleHomePage title="Vagas Quentes"/>
     <v-row class="pa-8">
-      <ListDetail v-model="VagaStore.$state"/>
+      <ListDetail v-model="VagaStore.$state.vagas"/>
     </v-row>
   </section>
 </template>
@@ -85,8 +85,7 @@ function setImgHeight() {
 }
 
 h1 {
-  font-size: 50px;
-  height: 60px;
+  font-weight: bold;
 }
 
 .search-field {

@@ -86,7 +86,6 @@ export class VagaController {
 
       return response.status(200).json(vagas);
     } catch (error) {
-      console.log(ExceptionHandler.handle(response, error))
       return ExceptionHandler.handle(response, error);
     }
 

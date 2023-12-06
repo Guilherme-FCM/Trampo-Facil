@@ -71,7 +71,6 @@ export class VagaService extends VagaRepository implements ServiceInterface {
             }
             return false;
         });
-        console.log(foundVagas)
         return foundVagas;
     }
 }

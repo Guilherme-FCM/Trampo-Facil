@@ -7,6 +7,7 @@
     :type="type"
     :disabled="disabled"
     @input="formatValue"
+    :required="required"
     @update:model-value="$emit('update:model-value', $event)"
   />
 </template>
@@ -26,7 +27,7 @@ const props = defineProps({
   prependInnerIcon: String,
   type: {
     type: String,
-    validator: (value: string) => ['cpf', 'cnpj', 'celular', 'date', 'cep'].includes(value),
+    validator: (value: string) => ['cpf', 'cnpj', 'celular', 'date', 'cep', 'number'].includes(value),
     default: '',
   },
   error: Boolean,
@@ -50,7 +51,7 @@ const formatCPF = (value: string) => {
   if (value.length > 9) {
     value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
   }
-  if (value.length == 11) {
+  if (value.length == 14) {
     emit('ok', value);
   }
   return value;
@@ -70,7 +71,7 @@ const formatCNPJ = (value: string) => {
   if (value.length > 13) {
     value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
   }
-  if (value.length == 14) {
+  if (value.length == 17) {
     emit('ok', value);
   }
   return value;
@@ -104,6 +105,10 @@ const formatCEP = (value) => {
   return value;
 };
 
+const number = (value: number): string => {
+   return value.replace(/\D/g, ''); // Remove caracteres não numéricos
+};
+
 const formatValue = (event: any) => {
   let value = event.target.value.replace(/\D/g, '');
 
@@ -119,6 +124,9 @@ const formatValue = (event: any) => {
       break;
     case 'cep':
       value = formatCEP(value);
+      break;
+    case 'number':
+      value = number(value);
       break;
     default:
       // Se o tipo não for especificado ou não for nenhum dos tipos conhecidos, aceite texto normal

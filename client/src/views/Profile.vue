@@ -95,6 +95,14 @@
               <td>{{ item.contrato }}</td>
               <td>
                 <v-btn
+                  icon="mdi-eye"
+                  color="blue"
+                  variant="text"
+                  size="small"
+                  @click="getCandidados(item.id)" />
+              </td>
+              <td>
+                <v-btn
                   icon="mdi-delete"
                   color="error"
                   variant="text"
@@ -118,7 +126,7 @@
           <InputText title="Nome Completo" v-model="CandidatoStore.$state.nome_completo"/>
         </v-col>
         <v-col cols="6">
-          <InputText title="CPF" v-model="CandidatoStore.$state.cpf" placeholder="###.###.###-##"/>
+          <InputText title="CPF" type="cpf" v-model="CandidatoStore.$state.cpf" placeholder="###.###.###-##"/>
         </v-col>
         <v-col cols="6">
           <InputText title="Data de Nascimento" type="date" v-model="CandidatoStore.$state.data_nascimento"/>
@@ -143,7 +151,7 @@
           <InputText title="Área de Atuação" v-model="EmpresaStore.$state.area_atuacao"/>
         </v-col>
         <v-col cols="6">
-          <InputText title="CNPJ" v-model="EmpresaStore.$state.cnpj" placeholder="##.###.###/####-##"/>
+          <InputText title="CNPJ" type="cnpj" v-model="EmpresaStore.$state.cnpj" placeholder="##.###.###/####-##"/>
         </v-col>
       </v-row>
       <v-row>
@@ -235,6 +243,26 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <v-dialog max-width="500" v-model="showCandidatosDialog">
+    <v-card class="py-2">
+      <v-card-title>Interessados</v-card-title>
+      <v-card-text>
+        <v-list>
+          <v-list-item v-for="candidatura in VagaStore.$state.candidaturas" :key="candidatura.id">
+            <v-list-item-title>{{ candidatura.candidato.nome_completo }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-card-text>
+      <v-card-actions class="justify-center">
+        <v-btn @click="showCandidatosDialog = false"
+               :style="{ 'min-width': '64px', 'max-width': '150px'}"
+               color="red"
+               variant="elevated"
+               block>Fechar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 <script lang="ts" setup>
 import TitleCard from "@/components/TitleCard.vue";
@@ -262,7 +290,7 @@ const LocalStorageStore = useLocalStorage()
 const usuario = ref<Candidato | Empresa>()
 const showIcon = ref(false)
 const editProfileDialog = ref(false)
-const showAddressDialog = ref(false);
+const showCandidatosDialog = ref(false);
 const addVagaDialog = ref(false)
 const addExperienciaDialog = ref(false)
 const userId = LocalStorageStore.user?.id
@@ -289,6 +317,7 @@ const vagaHeaders = [
   'Remuneração',
   'Turno',
   'Contrato',
+  'Candidatos',
 ]
 
 const experienciaHeaders = [
@@ -342,6 +371,12 @@ async function createVaga() {
   } catch (error) {
     EventEmitter.emit('error', 'Não foi possível registrar a vaga')
   }
+  VagaStore.$state.id = '';
+  VagaStore.$state.empresa = '';
+  VagaStore.$state.cargo = '';
+  VagaStore.$state.contrato = '';
+  VagaStore.$state.especificacao = '';
+  VagaStore.$state.turno = '';
 }
 
 async function deleteVaga(id: string) {
@@ -376,6 +411,11 @@ function formatDate(value: string) {
   const ano = date.getFullYear();
 
   return `${dia}/${mes}/${ano}`;
+}
+
+async function getCandidados(id: string) {
+  showCandidatosDialog.value = true
+  await VagaStore.getById(id)
 }
 </script>
 

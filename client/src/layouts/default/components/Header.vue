@@ -1,11 +1,11 @@
 <template>
   <v-app-bar flat class="header pl-4 pr-8 border-b">
     <Logo @click="router.push('/')"/>
-    
+
     <div v-if="LoginStore.isLogged">
       <Avatar />
     </div>
-    
+
     <div v-else>
       <v-btn class="mr-4" @click="router.push('/login')">Login</v-btn>
       <v-btn color="primary" variant="flat">Disponibiizar Vaga</v-btn>
@@ -27,4 +27,3 @@ const LoginStore = useLoginStore()
   color: rgb(var(--v-theme-primary));
 }
 </style>
-@/store/auth.store
