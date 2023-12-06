@@ -23,7 +23,10 @@ export class BaseRepository<E extends BaseEntity> implements RepositoryInterface
   }
 
   async findById(id: any): Promise<E | null> {
-    return this.repository.findOneBy({ id });
+    return this.repository.findOne({
+      where: { id },
+      relations: ["candidaturas"],
+    });
   }
 
   async update(id: any, data: E): Promise<E | null> {
