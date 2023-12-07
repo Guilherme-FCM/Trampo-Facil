@@ -3,20 +3,18 @@
   <v-container>
     <v-row justify="space-between">
         <v-col cols="8" size style="font-size: 20px">
+          <h3 class="mb-6 mt-2">Dados</h3>
           <div v-if="usuario?.cnpj" class="pb-3"><strong>CNPJ: </strong><span>{{ usuario?.cnpj }}</span></div>
           <div v-if="usuario?.cpf" class="pb-3"><strong>CPF: </strong><span>{{ usuario?.cpf }}</span></div>
           <div class="pb-3"><strong>E-mail: </strong><span>{{ usuario?.email }}</span></div>
           <div v-if="usuario?.sexo" class="pb-3"><strong>Sexo: </strong><span>{{ usuario?.sexo }}</span></div>
           <div v-if="usuario?.area_atuacao" class="pb-3"><strong>Área de Atuação: </strong><span>{{ usuario?.area_atuacao }}</span></div>
           <div v-if="usuario?.data_nascimento" class="pb-3"><strong>Data de Nascimento: </strong><span>{{ formatDate(usuario?.data_nascimento) }}</span></div>
-          <v-row>
-            <v-col v-if="usuario?.endereco?.descricao">
-              <div class="pb-3">
-                <strong>Endereço:</strong>
-                <span>{{ usuario?.endereco?.descricao }}</span>
-              </div>
-            </v-col>
-          </v-row>
+          <h3 class="mb-6 mt-2" v-if="usuario?.endereco?.cep">Endereço</h3>
+          <div v-if="usuario?.endereco?.descricao" class="pb-3"><strong>Descrição: </strong><span>{{ usuario?.endereco?.descricao }}</span></div>
+          <div v-if="usuario?.endereco?.cep" class="pb-3"><strong>CEP: </strong><span>{{ usuario?.endereco?.cep }}</span></div>
+          <div v-if="usuario?.endereco?.cidade" class="pb-3"><strong>Localidade: </strong><span>{{ usuario?.endereco?.cidade }} - {{ usuario?.endereco?.uf }}</span></div>
+          <div v-if="usuario?.endereco?.bairro" class="pb-3"><strong>Bairro: </strong><span>{{ usuario?.endereco?.bairro }}</span></div>
         </v-col>
         <v-col cols="3">
           <v-card @click="editProfileDialog = true" @mouseover="showIcon = true" @mouseleave="showIcon = false">
@@ -251,13 +249,14 @@
         <v-list>
           <v-list-item v-for="candidatura in VagaStore.$state.candidaturas" :key="candidatura.id">
             <v-list-item-title>{{ candidatura.candidato.nome_completo }}</v-list-item-title>
+            <hr/>
           </v-list-item>
         </v-list>
       </v-card-text>
       <v-card-actions class="justify-center">
         <v-btn @click="showCandidatosDialog = false"
                :style="{ 'min-width': '64px', 'max-width': '150px'}"
-               color="red"
+               color="error"
                variant="elevated"
                block>Fechar</v-btn>
       </v-card-actions>
@@ -346,11 +345,20 @@ async function getAddressInfo(cep: string) {
   try {
     const response = await fetch(`https://viacep.com.br/ws/${formatCEP(cep)}/json/`);
     const data = await response.json();
-    usuario.value.endereco.cep = data.cep
-    usuario.value.endereco.bairro = data.logradouro
-    usuario.value.endereco.uf = data.uf
-    usuario.value.endereco.cidade = data.localidade
-    usuario.value.endereco.descricao = data.comenplemento
+    if (data.erro){
+      EventEmitter.emit("info", "Não foi possivel obter o endereco!")
+      usuario.value.endereco.cep = '';
+      usuario.value.endereco.bairro = '';
+      usuario.value.endereco.uf = '';
+      usuario.value.endereco.cidade = '';
+      usuario.value.endereco.descricao = '';
+    } else {
+      usuario.value.endereco.cep = data.cep;
+      usuario.value.endereco.bairro = data.logradouro;
+      usuario.value.endereco.uf = data.uf;
+      usuario.value.endereco.cidade = data.localidade;
+      usuario.value.endereco.descricao = data.complemento;
+    }
 
   } catch (error) {
     EventEmitter.emit("info", "Não foi possivel obter o endereco!")
@@ -365,18 +373,18 @@ async function createVaga() {
 
   try {
     await VagaStore.create()
+    // Limpar os campos após a criação bem-sucedida da vaga
+    VagaStore.$state.cargo = '';
+    VagaStore.$state.remuneracao = 0;
+    VagaStore.$state.turno = '';
+    VagaStore.$state.contrato = '';
+    VagaStore.$state.especificacao = '';
     EventEmitter.emit('success', 'Vaga adicionada')
     EmpresaStore.getById(userId)
     addVagaDialog.value = false
   } catch (error) {
     EventEmitter.emit('error', 'Não foi possível registrar a vaga')
   }
-  VagaStore.$state.id = '';
-  VagaStore.$state.empresa = '';
-  VagaStore.$state.cargo = '';
-  VagaStore.$state.contrato = '';
-  VagaStore.$state.especificacao = '';
-  VagaStore.$state.turno = '';
 }
 
 async function deleteVaga(id: string) {
@@ -390,6 +398,11 @@ async function createExperiencia() {
 
   try {
     await ExperienciaStore.create()
+    ExperienciaStore.$state.empresa = '';
+    ExperienciaStore.$state.cargo = '';
+    ExperienciaStore.$state.descricao = '';
+    ExperienciaStore.$state.data_inicio = '';
+    ExperienciaStore.$state.data_fim = '';
     EventEmitter.emit('success', 'Experiencia adicionada')
     CandidatoStore.getById(userId)
     addExperienciaDialog.value = false
