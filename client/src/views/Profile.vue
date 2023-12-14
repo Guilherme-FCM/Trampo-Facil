@@ -50,7 +50,7 @@
             <tr v-for="(item, i) in usuario?.experiencias" :key="i">
               <td>{{ item.cargo }}</td>
               <td>{{ item.empresa }}</td>
-              <td>{{ formatDate(item.data_inicio) }} - {{ formatDate(item.data_fim) }}</td>
+              <td>{{ formatDate(item.data_inicio) }} - {{ item.data_fim ? formatDate(item.data_fim) : 'Atual' }}</td>
               <td>
                 <v-btn
                   icon="mdi-delete"
@@ -419,6 +419,8 @@ async function deleteExperiencia(id: string) {
 
 function formatDate(value: string) {
   const date = new Date(value)
+  date.setHours(date.getHours() + 3)
+
   const dia = String(date.getDate()).padStart(2, '0');
   const mes = String(date.getMonth() + 1).padStart(2, '0');
   const ano = date.getFullYear();

@@ -15,7 +15,7 @@ export class Candidato extends Usuario {
   @IsString({ message: 'CPF deve ser uma string' })
   public cpf!: string;
 
-  @Column()
+  @Column({ type: 'date', nullable: true })
   @IsDateString({}, { message: 'Data de nascimento deve ser uma data válida' })
   public data_nascimento!: Date;
 

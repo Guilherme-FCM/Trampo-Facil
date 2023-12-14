@@ -57,6 +57,9 @@ async function submit() {
   loading.value=!loading.value
   try {
     await LoginStore.login();
+    LoginStore.$state.email = ''
+    LoginStore.$state.senha = ''
+  
     router.push('/')
     EventEmitter.emit('success', 'Login realizado!');
   } catch (err: any) {

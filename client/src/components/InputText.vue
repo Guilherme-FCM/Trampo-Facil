@@ -7,7 +7,6 @@
     :type="type"
     :disabled="disabled"
     @input="formatValue"
-    :required="required"
     @update:model-value="$emit('update:model-value', $event)"
   />
 </template>
@@ -94,7 +93,7 @@ const formatCelular = (value: string) => {
   return value;
 };
 
-const formatCEP = (value) => {
+const formatCEP = (value: any) => {
   value = value.replace(/\D/g, '').slice(0, 8); // Limitando o CEP a 8 dígitos
   if (value.length > 5) {
     value = value.replace(/^(\d{5})(\d)/, '$1-$2');
@@ -105,7 +104,7 @@ const formatCEP = (value) => {
   return value;
 };
 
-const number = (value: number): string => {
+const number = (value: any): string => {
    return value.replace(/\D/g, ''); // Remove caracteres não numéricos
 };
 

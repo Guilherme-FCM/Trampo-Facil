@@ -5,7 +5,7 @@ export interface Candidato extends Usuario {
   id: string;
   nome_completo: string;
   cpf: string;
-  data_nascimento: Date;
+  data_nascimento: string;
   sexo: string;
   experiencias: Experiencia[];
 }
