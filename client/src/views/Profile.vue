@@ -270,7 +270,7 @@
 import TitleCard from "@/components/TitleCard.vue";
 import router from "@/router";
 import { useCandidatoStore } from "@/store/candidato.store";
-import { onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import semImg from '@/assets/sem_imagem.png';
 import { useLocalStorage } from "@/store/localStorage.store";
 import { useEmpresaStore } from "@/store/empresa.store";
@@ -278,7 +278,6 @@ import { useVagaStore } from "@/store/vaga.store";
 import { useExperienciaStore } from "@/store/experiencia.store";
 import { Candidato } from "@/types/Candidato";
 import { Empresa } from "@/types/Empresa";
-import { ref } from "vue";
 import FormCard from "@/components/FormCard.vue";
 import InputText from "@/components/InputText.vue";
 import { EventEmitter } from "@/utils/event-emitter";
@@ -436,6 +435,12 @@ async function getCandidados(id: string) {
   showCandidatosDialog.value = true
   candidaturas.value = await VagaStore.getCandidaturasById(id)
 }
+
+watch(usuario, (value: any) => {
+  if (!value.endereco) {
+    usuario.value.endereco = {}
+  }
+}, { deep: true })
 </script>
 
 <style scoped>
