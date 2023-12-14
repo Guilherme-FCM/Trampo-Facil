@@ -43,35 +43,13 @@ export class VagaService extends VagaRepository implements ServiceInterface {
         return super.update(id, data);
     }
 
-    public async findByValue<T extends keyof Vaga>(param: Vaga[T]): Promise<Vaga[]> {
+    public async findByValue<T extends keyof Vaga>(param: any): Promise<Vaga[]> {
         const allVagas = await super.findAll()
-        const foundVagas = allVagas.filter((vaga) => {
-            for (const key in vaga) {
-                if (Object.prototype.hasOwnProperty.call(vaga, key)) {
-                    const attrValue = vaga[key as keyof Vaga];
-                    if (key != 'empresa'){
-                        if (typeof attrValue === 'string' && attrValue.toLowerCase().includes(String(param).toLowerCase())) {
-                            return true;
-                        }
-                    } else {
-                        const obj_company = attrValue
-                        for (const key_conpany in obj_company){
-                            if (Object.prototype.hasOwnProperty.call(obj_company, key_conpany)) {
-                                if (obj_company != null) {
-                                    const attrCompanyValue = obj_company[key_conpany as keyof Empresa]
-                                    if (typeof attrCompanyValue === 'string' && attrCompanyValue.toLowerCase().includes(String(param).toLowerCase())) {
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                }
-            }
-            return false;
+        const foundVagas = allVagas.filter(vaga => {
+            return Object.values(vaga).some(value =>
+                typeof value === 'string' && value.toLowerCase().includes(param.toLowerCase())
+            );
         });
-        console.log(foundVagas)
         return foundVagas;
     }
 }

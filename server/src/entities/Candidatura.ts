@@ -12,7 +12,7 @@ export class Candidatura extends BaseEntity {
     @IsInt({ message: 'Candidato deve ser um id existente' })
     public candidato!: Candidato;
 
-    @ManyToOne(() => Vaga, vaga => vaga.candidaturas, { eager: true })
+    @ManyToOne(() => Vaga, vaga => vaga.candidaturas, { eager: true, onDelete : 'CASCADE' })
     @IsInt({ message: 'Vaga deve ser um id existente' })
     public vaga!: Vaga;
 }

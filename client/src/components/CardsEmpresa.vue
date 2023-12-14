@@ -1,9 +1,13 @@
 <template>
   <v-row>
-    <v-col v-for="empresa in empresas.slice(0, 10)" :key="empresa.id" cols="3">
-      <v-card 
-        flat height="170" width="233" 
-        class="d-flex align-center justify-center click" 
+    <v-col xs="12"
+           sm="6"
+           md="4"
+           lg="3"
+           xl="2" v-for="empresa in empresas.slice(0, 10)" :key="empresa.id">
+      <v-card
+        flat height="170" width="233"
+        class="d-flex align-center justify-center click"
         @click="$router.push(`/empresa/${empresa.id}`)"
       >
         <v-card-title style="width: 230px" class="text-center">

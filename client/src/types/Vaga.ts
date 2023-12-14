@@ -1,4 +1,5 @@
 import { Empresa } from "./Empresa";
+import {Candidatura} from "@/types/Candidatura";
 
 export interface Vaga {
   id: string;
@@ -8,6 +9,7 @@ export interface Vaga {
   turno: string;
   contrato: string;
   empresa: Empresa;
+  candidaturas: Candidatura
 }
 
 export interface VagaValue {

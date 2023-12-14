@@ -1,8 +1,4 @@
-import {Usuario} from "@/types/Candidato";
-import {Vaga} from "@/types/Vaga";
-
-export interface Candidatura extends Usuario {
+export interface Candidatura {
   candidato: string;
   vaga: string
-
 }

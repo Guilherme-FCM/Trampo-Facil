@@ -73,7 +73,6 @@ onMounted(() => {
 });
 
 function verEmpresa() {
-  console.log(userId)
   if(VagaStore.$state.empresa.id === userId && userType == 2){
     router.push('/meu-perfil')
   }else{

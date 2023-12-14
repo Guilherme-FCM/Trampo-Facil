@@ -39,6 +39,8 @@ export class CandidatoController{
           const candidato = await service.create(body);
           return response.status(200).json(candidato);
         } catch (error) {
+            if (error.message.includes('Duplicate entry'))
+                return ExceptionHandler.handle(response, {'message': 'Email e Senha já cadastrado!!!'})
           return ExceptionHandler.handle(response, error);
         }
       }

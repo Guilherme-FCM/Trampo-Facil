@@ -35,8 +35,8 @@ export class EmpresaService extends EmpresaRepository implements ServiceInterfac
 
         if (data.endereco?.id){
             await this.endereco.update(data.endereco.id, validate(data.endereco, Endereco));
-        }else {
-            await this.endereco.create(data.endereco);
+        } else if(data.endereco?.cep){
+            await this.endereco.create(data.endereco),validate(data.endereco, Endereco);
         }
 
         return super.update(id, data);

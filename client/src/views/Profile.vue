@@ -3,20 +3,18 @@
   <v-container>
     <v-row justify="space-between">
         <v-col cols="8" size style="font-size: 20px">
+          <h3 class="mb-6 mt-2">Dados</h3>
           <div v-if="usuario?.cnpj" class="pb-3"><strong>CNPJ: </strong><span>{{ usuario?.cnpj }}</span></div>
           <div v-if="usuario?.cpf" class="pb-3"><strong>CPF: </strong><span>{{ usuario?.cpf }}</span></div>
           <div class="pb-3"><strong>E-mail: </strong><span>{{ usuario?.email }}</span></div>
           <div v-if="usuario?.sexo" class="pb-3"><strong>Sexo: </strong><span>{{ usuario?.sexo }}</span></div>
           <div v-if="usuario?.area_atuacao" class="pb-3"><strong>Área de Atuação: </strong><span>{{ usuario?.area_atuacao }}</span></div>
           <div v-if="usuario?.data_nascimento" class="pb-3"><strong>Data de Nascimento: </strong><span>{{ formatDate(usuario?.data_nascimento) }}</span></div>
-          <v-row>
-            <v-col v-if="usuario?.endereco?.descricao">
-              <div class="pb-3">
-                <strong>Endereço:</strong>
-                <span>{{ usuario?.endereco?.descricao }}</span>
-              </div>
-            </v-col>
-          </v-row>
+          <h3 class="mb-6 mt-2" v-if="usuario?.endereco?.cep">Endereço</h3>
+          <div v-if="usuario?.endereco?.descricao" class="pb-3"><strong>Descrição: </strong><span>{{ usuario?.endereco?.descricao }}</span></div>
+          <div v-if="usuario?.endereco?.cep" class="pb-3"><strong>CEP: </strong><span>{{ usuario?.endereco?.cep }}</span></div>
+          <div v-if="usuario?.endereco?.cidade" class="pb-3"><strong>Localidade: </strong><span>{{ usuario?.endereco?.cidade }} - {{ usuario?.endereco?.uf }}</span></div>
+          <div v-if="usuario?.endereco?.bairro" class="pb-3"><strong>Bairro: </strong><span>{{ usuario?.endereco?.bairro }}</span></div>
         </v-col>
         <v-col cols="3">
           <v-card @click="editProfileDialog = true" @mouseover="showIcon = true" @mouseleave="showIcon = false">
@@ -52,7 +50,7 @@
             <tr v-for="(item, i) in usuario?.experiencias" :key="i">
               <td>{{ item.cargo }}</td>
               <td>{{ item.empresa }}</td>
-              <td>{{ formatDate(item.data_inicio) }} - {{ formatDate(item.data_fim) }}</td>
+              <td>{{ formatDate(item.data_inicio) }} - {{ item.data_fim ? formatDate(item.data_fim) : 'Atual' }}</td>
               <td>
                 <v-btn
                   icon="mdi-delete"
@@ -95,6 +93,14 @@
               <td>{{ item.contrato }}</td>
               <td>
                 <v-btn
+                  icon="mdi-eye"
+                  color="blue"
+                  variant="text"
+                  size="small"
+                  @click="getCandidados(item.id)" />
+              </td>
+              <td>
+                <v-btn
                   icon="mdi-delete"
                   color="error"
                   variant="text"
@@ -118,7 +124,7 @@
           <InputText title="Nome Completo" v-model="CandidatoStore.$state.nome_completo"/>
         </v-col>
         <v-col cols="6">
-          <InputText title="CPF" v-model="CandidatoStore.$state.cpf" placeholder="###.###.###-##"/>
+          <InputText title="CPF" type="cpf" v-model="CandidatoStore.$state.cpf" placeholder="###.###.###-##"/>
         </v-col>
         <v-col cols="6">
           <InputText title="Data de Nascimento" type="date" v-model="CandidatoStore.$state.data_nascimento"/>
@@ -143,7 +149,7 @@
           <InputText title="Área de Atuação" v-model="EmpresaStore.$state.area_atuacao"/>
         </v-col>
         <v-col cols="6">
-          <InputText title="CNPJ" v-model="EmpresaStore.$state.cnpj" placeholder="##.###.###/####-##"/>
+          <InputText title="CNPJ" type="cnpj" v-model="EmpresaStore.$state.cnpj" placeholder="##.###.###/####-##"/>
         </v-col>
       </v-row>
       <v-row>
@@ -235,12 +241,36 @@
       </v-card-actions>
     </v-card>
   </v-dialog>
+
+  <v-dialog max-width="500" v-model="showCandidatosDialog">
+    <v-card class="py-2">
+      <v-card-title>Interessados</v-card-title>
+      <v-card-text>
+        <v-list>
+          <v-list-item v-if="candidaturas.length == 0">
+            <v-list-item-title>Nenhuma candidatura para esta vaga ainda</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-else v-for="(candidatura, i) in candidaturas" :key="candidatura.id">
+            <v-list-item-title>{{ i + 1}} - {{ candidatura.candidato.nome_completo }}</v-list-item-title>
+            <hr/>
+          </v-list-item>
+        </v-list>
+      </v-card-text>
+      <v-card-actions class="justify-center">
+        <v-btn @click="showCandidatosDialog = false"
+               :style="{ 'min-width': '64px', 'max-width': '150px'}"
+               color="error"
+               variant="elevated"
+               block>Fechar</v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 <script lang="ts" setup>
 import TitleCard from "@/components/TitleCard.vue";
 import router from "@/router";
 import { useCandidatoStore } from "@/store/candidato.store";
-import { onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import semImg from '@/assets/sem_imagem.png';
 import { useLocalStorage } from "@/store/localStorage.store";
 import { useEmpresaStore } from "@/store/empresa.store";
@@ -248,7 +278,6 @@ import { useVagaStore } from "@/store/vaga.store";
 import { useExperienciaStore } from "@/store/experiencia.store";
 import { Candidato } from "@/types/Candidato";
 import { Empresa } from "@/types/Empresa";
-import { ref } from "vue";
 import FormCard from "@/components/FormCard.vue";
 import InputText from "@/components/InputText.vue";
 import { EventEmitter } from "@/utils/event-emitter";
@@ -262,7 +291,7 @@ const LocalStorageStore = useLocalStorage()
 const usuario = ref<Candidato | Empresa>()
 const showIcon = ref(false)
 const editProfileDialog = ref(false)
-const showAddressDialog = ref(false);
+const showCandidatosDialog = ref(false);
 const addVagaDialog = ref(false)
 const addExperienciaDialog = ref(false)
 const userId = LocalStorageStore.user?.id
@@ -289,6 +318,7 @@ const vagaHeaders = [
   'Remuneração',
   'Turno',
   'Contrato',
+  'Candidatos',
 ]
 
 const experienciaHeaders = [
@@ -317,11 +347,20 @@ async function getAddressInfo(cep: string) {
   try {
     const response = await fetch(`https://viacep.com.br/ws/${formatCEP(cep)}/json/`);
     const data = await response.json();
-    usuario.value.endereco.cep = data.cep
-    usuario.value.endereco.bairro = data.logradouro
-    usuario.value.endereco.uf = data.uf
-    usuario.value.endereco.cidade = data.localidade
-    usuario.value.endereco.descricao = data.comenplemento
+    if (data.erro){
+      EventEmitter.emit("info", "Não foi possivel obter o endereco!")
+      usuario.value.endereco.cep = '';
+      usuario.value.endereco.bairro = '';
+      usuario.value.endereco.uf = '';
+      usuario.value.endereco.cidade = '';
+      usuario.value.endereco.descricao = '';
+    } else {
+      usuario.value.endereco.cep = data.cep;
+      usuario.value.endereco.bairro = data.logradouro;
+      usuario.value.endereco.uf = data.uf;
+      usuario.value.endereco.cidade = data.localidade;
+      usuario.value.endereco.descricao = data.complemento;
+    }
 
   } catch (error) {
     EventEmitter.emit("info", "Não foi possivel obter o endereco!")
@@ -336,6 +375,12 @@ async function createVaga() {
 
   try {
     await VagaStore.create()
+    // Limpar os campos após a criação bem-sucedida da vaga
+    VagaStore.$state.cargo = '';
+    VagaStore.$state.remuneracao = 0;
+    VagaStore.$state.turno = '';
+    VagaStore.$state.contrato = '';
+    VagaStore.$state.especificacao = '';
     EventEmitter.emit('success', 'Vaga adicionada')
     EmpresaStore.getById(userId)
     addVagaDialog.value = false
@@ -355,6 +400,11 @@ async function createExperiencia() {
 
   try {
     await ExperienciaStore.create()
+    ExperienciaStore.$state.empresa = '';
+    ExperienciaStore.$state.cargo = '';
+    ExperienciaStore.$state.descricao = '';
+    ExperienciaStore.$state.data_inicio = null;
+    ExperienciaStore.$state.data_fim = null;
     EventEmitter.emit('success', 'Experiencia adicionada')
     CandidatoStore.getById(userId)
     addExperienciaDialog.value = false
@@ -371,12 +421,26 @@ async function deleteExperiencia(id: string) {
 
 function formatDate(value: string) {
   const date = new Date(value)
+  date.setHours(date.getHours() + 3)
+
   const dia = String(date.getDate()).padStart(2, '0');
   const mes = String(date.getMonth() + 1).padStart(2, '0');
   const ano = date.getFullYear();
 
   return `${dia}/${mes}/${ano}`;
 }
+
+const candidaturas = ref([]);
+async function getCandidados(id: string) {
+  showCandidatosDialog.value = true
+  candidaturas.value = await VagaStore.getCandidaturasById(id)
+}
+
+watch(usuario, (value: any) => {
+  if (!value.endereco) {
+    usuario.value.endereco = {}
+  }
+}, { deep: true })
 </script>
 
 <style scoped>

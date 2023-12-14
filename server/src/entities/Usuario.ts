@@ -1,8 +1,9 @@
-import { Column, JoinColumn, OneToOne } from "typeorm"
+import {Column, Index, JoinColumn, OneToOne} from "typeorm"
 import { Endereco } from "./Endereco";
 import { BaseEntity } from "./BaseEntity";
 import { IsNotEmpty, IsString, IsEmail, IsObject, IsOptional } from "class-validator"
 
+@Index(['email', 'senha'], { unique: true })
 export abstract class Usuario extends BaseEntity {
 	@Column()
 	@IsEmail({}, {message: "Defina um email válido"})

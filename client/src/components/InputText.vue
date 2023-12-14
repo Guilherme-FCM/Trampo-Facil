@@ -26,7 +26,7 @@ const props = defineProps({
   prependInnerIcon: String,
   type: {
     type: String,
-    validator: (value: string) => ['cpf', 'cnpj', 'celular', 'date', 'cep'].includes(value),
+    validator: (value: string) => ['cpf', 'cnpj', 'celular', 'date', 'cep', 'number'].includes(value),
     default: '',
   },
   error: Boolean,
@@ -50,7 +50,7 @@ const formatCPF = (value: string) => {
   if (value.length > 9) {
     value = value.replace(/^(\d{3})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3-$4');
   }
-  if (value.length == 11) {
+  if (value.length == 14) {
     emit('ok', value);
   }
   return value;
@@ -61,16 +61,16 @@ const formatCNPJ = (value: string) => {
   if (value.length > 2) {
     value = value.replace(/^(\d{2})(\d)/, '$1.$2');
   }
-  if (value.length > 6) {
+  if (value.length > 5) {
     value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
   }
-  if (value.length > 9) {
+  if (value.length > 8) {
     value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3/$4');
   }
-  if (value.length > 13) {
+  if (value.length > 12) {
     value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
   }
-  if (value.length == 14) {
+  if (value.length == 18) {
     emit('ok', value);
   }
   return value;
@@ -93,7 +93,7 @@ const formatCelular = (value: string) => {
   return value;
 };
 
-const formatCEP = (value) => {
+const formatCEP = (value: any) => {
   value = value.replace(/\D/g, '').slice(0, 8); // Limitando o CEP a 8 dígitos
   if (value.length > 5) {
     value = value.replace(/^(\d{5})(\d)/, '$1-$2');
@@ -102,6 +102,10 @@ const formatCEP = (value) => {
     emit('ok', value);
   }
   return value;
+};
+
+const number = (value: any): string => {
+   return value.replace(/\D/g, ''); // Remove caracteres não numéricos
 };
 
 const formatValue = (event: any) => {
@@ -119,6 +123,9 @@ const formatValue = (event: any) => {
       break;
     case 'cep':
       value = formatCEP(value);
+      break;
+    case 'number':
+      value = number(value);
       break;
     default:
       // Se o tipo não for especificado ou não for nenhum dos tipos conhecidos, aceite texto normal
