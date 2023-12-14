@@ -401,8 +401,8 @@ async function createExperiencia() {
     ExperienciaStore.$state.empresa = '';
     ExperienciaStore.$state.cargo = '';
     ExperienciaStore.$state.descricao = '';
-    ExperienciaStore.$state.data_inicio = '';
-    ExperienciaStore.$state.data_fim = '';
+    ExperienciaStore.$state.data_inicio = null;
+    ExperienciaStore.$state.data_fim = null;
     EventEmitter.emit('success', 'Experiencia adicionada')
     CandidatoStore.getById(userId)
     addExperienciaDialog.value = false
