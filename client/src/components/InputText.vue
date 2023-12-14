@@ -61,16 +61,16 @@ const formatCNPJ = (value: string) => {
   if (value.length > 2) {
     value = value.replace(/^(\d{2})(\d)/, '$1.$2');
   }
-  if (value.length > 6) {
+  if (value.length > 5) {
     value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
   }
-  if (value.length > 9) {
+  if (value.length > 8) {
     value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})(\d)/, '$1.$2.$3/$4');
   }
-  if (value.length > 13) {
+  if (value.length > 12) {
     value = value.replace(/^(\d{2})\.(\d{3})\.(\d{3})\/(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
   }
-  if (value.length == 17) {
+  if (value.length == 18) {
     emit('ok', value);
   }
   return value;
