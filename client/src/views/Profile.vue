@@ -247,8 +247,11 @@
       <v-card-title>Interessados</v-card-title>
       <v-card-text>
         <v-list>
-          <v-list-item v-for="candidatura in VagaStore.$state.candidaturas" :key="candidatura.id">
-            <v-list-item-title>{{ candidatura.candidato.nome_completo }}</v-list-item-title>
+          <v-list-item v-if="candidaturas.length == 0">
+            <v-list-item-title>Nenhuma candidatura para esta vaga ainda</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-else v-for="(candidatura, i) in candidaturas" :key="candidatura.id">
+            <v-list-item-title>{{ i + 1}} - {{ candidatura.candidato.nome_completo }}</v-list-item-title>
             <hr/>
           </v-list-item>
         </v-list>
@@ -428,9 +431,10 @@ function formatDate(value: string) {
   return `${dia}/${mes}/${ano}`;
 }
 
+const candidaturas = ref([]);
 async function getCandidados(id: string) {
   showCandidatosDialog.value = true
-  await VagaStore.getById(id)
+  candidaturas.value = await VagaStore.getCandidaturasById(id)
 }
 </script>
 

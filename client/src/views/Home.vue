@@ -31,7 +31,7 @@
   <section class="jobs">
     <TitleHomePage title="Vagas Quentes"/>
     <v-row class="pa-8">
-      <ListDetail v-model="VagaStore.$state.vagas"/>
+      <ListDetail v-model="VagasStore.$state.vagas"/>
     </v-row>
   </section>
 </template>
@@ -46,9 +46,8 @@ import { useVagasStore } from "@/store/vagas.store";
 import { useEmpresasStore } from "@/store/empresas.store";
 import { reactive } from 'vue'
 import type { VagaValue } from "@/types/Vaga";
-import router from "@/router";
 
-const VagaStore = useVagasStore();
+const VagasStore = useVagasStore();
 const EmpresasStore = useEmpresasStore();
 
 const form = reactive<VagaValue>({
@@ -56,13 +55,13 @@ const form = reactive<VagaValue>({
 })
 
 function handlerSubmit(){
-  VagaStore.findByValue(form.valor)
+  VagasStore.findByValue(form.valor)
 }
 
 let imgHeight = ref(0);
 
 onMounted(async () => {
-  VagaStore.getAll();
+  VagasStore.getAll();
   EmpresasStore.getAll();
 
   setImgHeight();
